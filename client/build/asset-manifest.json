@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.30d9c6c9.css",
+    "main.js": "/static/js/main.db86fdc4.js",
+    "static/js/592.71bc5cad.chunk.js": "/static/js/592.71bc5cad.chunk.js",
+    "static/media/new1.png": "/static/media/new1.1a3d4c4025949faacd77.png",
+    "static/media/Wainganga.jpg": "/static/media/Wainganga.d2ff1311cb2c108be713.jpg",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "index.html": "/index.html",
+    "main.30d9c6c9.css.map": "/static/css/main.30d9c6c9.css.map",
+    "main.db86fdc4.js.map": "/static/js/main.db86fdc4.js.map",
+    "592.71bc5cad.chunk.js.map": "/static/js/592.71bc5cad.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.30d9c6c9.css",
+    "static/js/main.db86fdc4.js"
+  ]
+}

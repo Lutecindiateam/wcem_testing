@@ -1,0 +1,346 @@
+const partnerAdmin = require("../../models/partner/admin");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const upload = require("../../models/partner/upload");
+const financial = require("../../models/partner/amount");
+
+exports.getPartnerAdminProfile = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await partnerAdmin.findById(id).exec();
+    if (response) {
+      return res.status(200).json({
+        status: "success",
+        data: response,
+        message: "Admin profile get succesfully",
+      });
+    }
+    // console.log(response);
+  } catch (err) {
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
+exports.partnerAdminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // Check if user exists
+
+    await partnerAdmin.findOne({ email }).then((user) => {
+      // console.log(req.body);
+      // console.log("EMAIL :: ", user)
+      if (!user) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      } else if (user.active == "pending") {
+        return res.status(400).json({
+          error:
+            "Your request is currently pending. Please contact our support team.",
+        });
+      }
+
+      bcrypt.compare(password, user.password, function (error, isMatch) {
+        // console.log("MATCH :: ", isMatch)
+        if (isMatch) {
+          const payload = {
+            id: user.id,
+            email: user.email,
+          };
+          jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: 31556926 },
+            (err, token) => {
+              return res.status(200).json({
+                data: { id: user.id, token: token, role: user.role, value: user.value, name: user.name },
+                message: "Sign In success",
+                status: "success",
+              });
+            }
+          );
+        } else {
+          console.error(error);
+          return res.status(400).json({ error: "Invalid password" });
+        }
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
+exports.getShopsData = async (req, res) => {
+  // console.log(req);
+  try {
+    const response = await upload.find({ rejection: null });
+    if (response.length > 0) {
+      return res.status(200).json({
+        data: { response },
+        status: "success",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
+exports.getSpecShopData = async (req, res) => {
+  try {
+    // const response = await upload.find({ p_id: req.params.id });
+    const response = await upload.find({ rejection: null });
+    if (response.length > 0) {
+      return res.status(200).json({
+        data: { response },
+        status: "success",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
+exports.addIntensive = async (req, res) => {
+  try {
+    let balance;
+    const { adv_payble_amt, paid_amount, cheque_date, cheque_no, adm_id } = req.body;
+    const existing = await financial
+      .findOne({ adm_id: adm_id }).limit(1).
+      sort({ createdAt: -1 })
+      .exec();
+    if (existing) {
+      balance = existing.balance - paid_amount;
+    } else {
+      balance = adv_payble_amt - paid_amount;
+    }
+    const system_date = new Date()
+    const student = new financial({
+      adv_payble_amt,
+      paid_amount,
+      cheque_date,
+      cheque_no,
+      adm_id,
+      balance,
+      system_date
+    });
+
+    const response = await student.save();
+
+    // const response = await financial.create(req.body);
+    // const response = await upload.findOneAndUpdate(
+    //   { _id: req.params.id },
+    //   {
+    //     $set: {
+    //       // adv_payble_amt: req.body.adv_payble_amt,
+    //       paid_amount: req.body.paid_amount,
+    //       balance: req.body.balance,
+    //       cheque_no: req.body.cheque_no,
+    //       cheque_date: req.body.cheque_date
+
+    //     },
+    //   },
+    //   { new: true }
+    // );
+    // console.log(response);
+
+    if (response) {
+      return res.status(200).json({
+        data: { response },
+        status: "success",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+};
+
+exports.getfinancial = async (req, res) => {
+  // console.log(req.params);
+  try {
+    const id = req.params.id;
+    const response = await financial.find({ adm_id: id });
+    if (response) {
+      return res.status(200).json({
+        status: "success",
+        data: response,
+        message: "Admin profile get succesfully",
+      });
+    }
+  } catch (err) {
+    console.log("hello");
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
+
+//beney paul sir
+exports.editEditorStatus = async (req, res) => {
+  try {
+
+    const existing = await financial.findOne({ adm_id: req.params.id })
+    if (!existing) {
+      return res.status(500).json({ message: "Before proceeding with approval, kindly add the incentive. Further actions are currently restricted." })
+    }
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          status: "editor"
+        },
+      },
+      { new: true }
+    )
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+}
+
+//madankar sir
+exports.editForAdminStatus = async (req, res) => {
+  try {
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          status: "admin"
+        },
+      },
+      { new: true }
+    )
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+}
+
+//chede sir
+exports.editVerifyAdmin = async (req, res) => {
+  try {
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          status: "verify"
+        },
+      },
+      { new: true }
+    )
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+}
+
+//dahikar sir 
+exports.editAdminVerify = async (req, res) => {
+  try {
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          status: "super"
+        },
+      },
+      { new: true }
+    )
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+}
+
+//superadmin
+
+exports.editSuperAdmin = async (req, res) => {
+  try {
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          status: true
+        },
+      },
+      { new: true }
+    )
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
+    });
+  }
+}
+
+exports.getSourceWiseAdm = async (req, res) => {
+  try {
+    const adms = await upload.aggregate([
+      {
+        $match: { status: "true" } // Filter documents where status is true
+      },
+      {
+        $group: {
+          _id: { source_id: '$source_id', source: '$source' },
+          total_sourcewiseadm: { $sum: 1 }
+        }
+      },
+      { $sort: { total_sourcewiseadm: -1 } },
+      // { $limit: 5 }
+    ]);
+
+    const formattedAdms = adms.map(job => ({
+      source_id: job._id.source_id,
+      source: job._id.source,
+      total_sourcewiseadm: job.total_sourcewiseadm
+    }));
+
+    return res.json({
+      status: 'success',
+      message: 'Source Wise Admissions',
+      data: formattedAdms
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
