@@ -73,32 +73,35 @@ const { AddAmount, getBranchData } = require("../controller/partner/amount");
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const {branch, course} = req.body;
-    // if (file.fieldname === "files") {
-    // console.log(req.body);
-    cb(
-      null,
-      path.join(
-        path.dirname(__dirname),
-        `WCEM-2024-2025/${course}/${branch}`
-        // "wcem_document/department/year/document"
-      )
-    );
-    //   } else {
-    //     cb(null, path.join(path.dirname(__dirname), "uploads"));
-    //   }
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const {branch, course} = req.body;
+//     // if (file.fieldname === "files") {
+//     // console.log(req.body);
+//     cb(
+//       null,
+//       path.join(
+//         path.dirname(__dirname),
+//         `WCEM-2024-2025/${course}/${branch}`
+//         // "wcem_document/department/year/document"
+//       )
+//     );
+//     //   } else {
+//     //     cb(null, path.join(path.dirname(__dirname), "uploads"));
+//     //   }
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + "-" + file.originalname);
+//   },
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
 //Temporary Update
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.post("/create_user_account", create_user_account);
 router.post("/authenticate_user", authenticate_user);

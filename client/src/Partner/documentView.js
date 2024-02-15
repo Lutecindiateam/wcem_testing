@@ -39,6 +39,7 @@ import { CloseCircleTwoTone } from "@ant-design/icons";
 import { EyeOutlined } from "@ant-design/icons";
 import { ImageViewModal } from "./ViewDocModal";
 import { generatePublicUrl } from "./urlConfig";
+import { Storage } from 'aws-amplify';
 
 /**
  * @author
@@ -151,16 +152,133 @@ const DocView = (props) => {
     }
   }, [props.data.loginData]);
 
+  // const handleSubmit = async (values) => {
+  //   // console.log(values);
+  //   try {
+  //     // setLoader(true);
+  //     let formData = new FormData();
+  //     formData.append("id", params.id);
+  //     formData.append("branch", params.branch);
+  //     formData.append("course", params.course)
+  //     if (adharFile) {
+  //       formData.append("file", adharFile.file);
+  //       formData.append("name", adharFile.name);
+  //     }
+  //     if (photoFile) {
+  //       formData.append("file", photoFile.file);
+  //       formData.append("name", photoFile.name);
+  //     }
+  //     if (signFile) {
+  //       formData.append("file", signFile.file);
+  //       formData.append("name", signFile.name);
+  //     }
+  //     if (tcFile) {
+  //       formData.append("file", tcFile.file);
+  //       formData.append("name", tcFile.name);
+  //     }
+  //     if (tenthFile) {
+  //       formData.append("file", tenthFile.file);
+  //       formData.append("name", tenthFile.name);
+  //     }
+  //     if (twelfthFile) {
+  //       formData.append("file", twelfthFile.file);
+  //       formData.append("name", twelfthFile.name);
+  //     }
+  //     if (casteFile) {
+  //       formData.append("file", casteFile.file);
+  //       formData.append("name", casteFile.name);
+  //     }
+  //     if (nclFile) {
+  //       formData.append("file", nclFile.file);
+  //       formData.append("name", nclFile.name);
+  //     }
+  //     if (domicileFile) {
+  //       formData.append("file", domicileFile.file);
+  //       formData.append("name", domicileFile.name);
+  //     }
+  //     if (csvFile) {
+  //       formData.append("file", csvFile.file);
+  //       formData.append("name", csvFile.name);
+  //     }
+  //     if (cetFile) {
+  //       formData.append("file", cetFile.file);
+  //       formData.append("name", cetFile.name);
+  //     }
+  //     if (otherFile) {
+  //       formData.append("file", otherFile.file);
+  //       formData.append("name", otherFile.name);
+  //     }
+  //     if (other2File) {
+  //       formData.append("file", other2File.file);
+  //       formData.append("name", other2File.name);
+  //     }
+  //     if (other3File) {
+  //       formData.append("file", other3File.file);
+  //       formData.append("name", other3File.name);
+  //     }
+  //     if (migrationFile) {
+  //       formData.append("file", migrationFile.file);
+  //       formData.append("name", migrationFile.name);
+  //     }
+  //     if (deplomaFile) {
+  //       formData.append("file", deplomaFile.file);
+  //       formData.append("name", deplomaFile.name);
+  //     }
+  //     if (allotmentFile) {
+  //       formData.append("file", allotmentFile.file);
+  //       formData.append("name", allotmentFile.name);
+  //     }
+
+  //     // formData.forEach((value, key) => {
+  //     //   console.log(key, value);
+  //     // });
+  //     props.requestEmpProfile({
+  //       token: user.token,
+  //       data: {
+  //         formData,
+  //       },
+  //     });
+  //     setAdharFile(null);
+  //     setPhotoFile(null);
+  //     setSignFile(null);
+  //     setTcFile(null);
+  //     setTenthFile(null);
+  //     setTwelfthFile(null);
+  //     setCasteFile(null);
+  //     setNclFile(null);
+  //     setDomicileFile(null);
+  //     setCsvFile(null);
+  //     setCetFile(null);
+  //     setOtherFile(null);
+  //     setOther2File(null);
+  //     setOther3File(null);
+  //     setMigrationFile(null);
+  //     setDeplomaFile(null);
+  //     setAllotmentFile(null);
+  //     // setLoader(true);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     toast.error("error at creating");
+  //     setLoader(false);
+  //   }
+  // };
+
   const handleSubmit = async (values) => {
     // console.log(values);
     try {
       // setLoader(true);
       let formData = new FormData();
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + `${adharFile.name}`;
+      const key = `${params.course}/${params.branch}/${uniqueSuffix}`;
       formData.append("id", params.id);
-      formData.append("branch", params.branch);
-      formData.append("course", params.course)
+      // formData.append("branch", params.branch);
+      // formData.append("course", params.course)
       if (adharFile) {
-        formData.append("file", adharFile.file);
+        const result = await Storage.put(key, adharFile.file, {
+          contentType: adharFile.file.type, // Provide the content type if known
+        });
+        // console.log('Uploaded file key:', result.key);
+        formData.append("file", result.key);
         formData.append("name", adharFile.name);
       }
       if (photoFile) {
@@ -228,9 +346,24 @@ const DocView = (props) => {
         formData.append("name", allotmentFile.name);
       }
 
-      // formData.forEach((value, key) => {
-      //   console.log(key, value);
+      // console.log(formData.file);
+      // formData.forEach(async (value, key) => {
+      //   console.log("key ::", key);
+      //   console.log("value ::", value);
+
+      //   const result = await Storage.put(value.name, value, {
+      //     contentType: value.type, // Provide the content type if known
+      //   });
+      //   console.log("result ::", result);
+      //   console.log("key ::", result.key);
       // });
+
+      // for (const [key, value] of formData.entries()) {
+      //   console.log(key, value);
+
+      //   console.log('Uploaded file key:', result.key);
+      //   // Proceed with additional logic if needed
+      // }
       props.requestEmpProfile({
         token: user.token,
         data: {
@@ -336,6 +469,8 @@ const DocView = (props) => {
   const handleViewImage = (imageUrl) => {
     window.open(imageUrl, "_blank");
   };
+
+
   return (
     <Layout>
       <Fragment>
@@ -399,9 +534,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.adhar}`)
-                        )
+                        // handleViewImage(
+                          generatePublicUrl(`${document.adhar}`)
+                        // )
                       }
                     />
                   </div>

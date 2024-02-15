@@ -2,12 +2,11 @@ const upload = require("../../models/partner/upload");
 
 exports.uploadDocument = async (req, res) => {
   try {
-    // console.log("req ::", req.body);
     const response = await upload.findOneAndUpdate(
       { _id: req.body.id },
       {
         $set: {
-          [`documents.${req.body.name}`]: req.file.filename,
+          [`documents.${req.body.name}`]: req.body.file,
         },
       },
       { new: true }
