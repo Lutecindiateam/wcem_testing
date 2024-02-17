@@ -37,7 +37,7 @@ import { saveAs } from "file-saver";
 import { useParams } from "react-router-dom";
 import { CloseCircleTwoTone } from "@ant-design/icons";
 import { EyeOutlined } from "@ant-design/icons";
-import { ImageViewModal } from "./ViewDocModal";
+import { ImageViewModal } from "./OtpRegister";
 import { generatePublicUrl } from "./urlConfig";
 import { Storage } from 'aws-amplify';
 
@@ -108,7 +108,7 @@ const DocView = (props) => {
     let resumeData = props.candidate.resumeData;
     if (resumeData !== undefined) {
       if (resumeData?.data?.status == "success") {
-        Swal.fire("Good job!", "Document Uploaded successfully.", "success");
+        Swal.fire("Complete!", "Admission Completed.", "success");
         navigate("/upload")
         // setLoader(false);
         // form.resetFields();
@@ -268,7 +268,7 @@ const DocView = (props) => {
     try {
       // setLoader(true);
       let formData = new FormData();
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + `${adharFile.name}`;
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + "-" + `${params.id}`;
       const key = `${params.course}/${params.branch}/${uniqueSuffix}`;
       formData.append("id", params.id);
       // formData.append("branch", params.branch);
@@ -282,67 +282,115 @@ const DocView = (props) => {
         formData.append("name", adharFile.name);
       }
       if (photoFile) {
-        formData.append("file", photoFile.file);
+        const result = await Storage.put(key, photoFile.file, {
+          contentType: photoFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", photoFile.name);
       }
       if (signFile) {
-        formData.append("file", signFile.file);
+        const result = await Storage.put(key, signFile.file, {
+          contentType: signFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", signFile.name);
       }
       if (tcFile) {
-        formData.append("file", tcFile.file);
+        const result = await Storage.put(key, tcFile.file, {
+          contentType: tcFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", tcFile.name);
       }
       if (tenthFile) {
-        formData.append("file", tenthFile.file);
+        const result = await Storage.put(key, tenthFile.file, {
+          contentType: tenthFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", tenthFile.name);
       }
       if (twelfthFile) {
-        formData.append("file", twelfthFile.file);
+        const result = await Storage.put(key, twelfthFile.file, {
+          contentType: twelfthFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", twelfthFile.name);
       }
       if (casteFile) {
-        formData.append("file", casteFile.file);
+        const result = await Storage.put(key, casteFile.file, {
+          contentType: casteFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", casteFile.name);
       }
       if (nclFile) {
-        formData.append("file", nclFile.file);
+        const result = await Storage.put(key, nclFile.file, {
+          contentType: nclFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", nclFile.name);
       }
       if (domicileFile) {
-        formData.append("file", domicileFile.file);
+        const result = await Storage.put(key, domicileFile.file, {
+          contentType: domicileFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", domicileFile.name);
       }
       if (csvFile) {
-        formData.append("file", csvFile.file);
+        const result = await Storage.put(key, csvFile.file, {
+          contentType: csvFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", csvFile.name);
       }
       if (cetFile) {
-        formData.append("file", cetFile.file);
+        const result = await Storage.put(key, cetFile.file, {
+          contentType: cetFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", cetFile.name);
       }
       if (otherFile) {
-        formData.append("file", otherFile.file);
+        const result = await Storage.put(key, otherFile.file, {
+          contentType: otherFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", otherFile.name);
       }
       if (other2File) {
-        formData.append("file", other2File.file);
+        const result = await Storage.put(key, other2File.file, {
+          contentType: other2File.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", other2File.name);
       }
       if (other3File) {
-        formData.append("file", other3File.file);
+        const result = await Storage.put(key, other3File.file, {
+          contentType: other3File.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", other3File.name);
       }
       if (migrationFile) {
-        formData.append("file", migrationFile.file);
+        const result = await Storage.put(key, migrationFile.file, {
+          contentType: migrationFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", migrationFile.name);
       }
       if (deplomaFile) {
-        formData.append("file", deplomaFile.file);
+        const result = await Storage.put(key, deplomaFile.file, {
+          contentType: deplomaFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", deplomaFile.name);
       }
       if (allotmentFile) {
-        formData.append("file", allotmentFile.file);
+        const result = await Storage.put(key, allotmentFile.file, {
+          contentType: allotmentFile.file.type, // Provide the content type if known
+        });
+        formData.append("file", result.key);
         formData.append("name", allotmentFile.name);
       }
 
@@ -466,9 +514,9 @@ const DocView = (props) => {
   const handleToggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
-  const handleViewImage = (imageUrl) => {
-    window.open(imageUrl, "_blank");
-  };
+  // const handleViewImage = (imageUrl) => {
+  //   window.open(imageUrl, "_blank");
+  // };
 
 
   return (
@@ -535,7 +583,7 @@ const DocView = (props) => {
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
                         // handleViewImage(
-                          generatePublicUrl(`${document.adhar}`)
+                        generatePublicUrl(`${document.adhar}`)
                         // )
                       }
                     />
@@ -581,9 +629,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.photo}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.photo}`)
+                        // )
                       }
                     />
                   </div>
@@ -629,9 +677,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.sign}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.sign}`)
+                        // )
                       }
                     />
                   </div>
@@ -643,7 +691,7 @@ const DocView = (props) => {
                 )}
               </div>
             </Form.Item>
-            <Form.Item style={{ marginBottom: "15px" }} name="tc" label="TC">
+            <Form.Item style={{ marginBottom: "15px" }} name="tc" label="Leaving Certificate">
               <div style={{ display: "flex" }}>
                 <Input
                   type="file"
@@ -672,9 +720,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.tc}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.tc}`)
+                        // )
                       }
                     />
                   </div>
@@ -720,9 +768,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.tenth}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.tenth}`)
+                        // )
                       }
                     />
                   </div>
@@ -768,9 +816,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.twelfth}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.twelfth}`)
+                        // )
                       }
                     />
                   </div>
@@ -816,9 +864,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.caste}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.caste}`)
+                        // )
                       }
                     />
                   </div>
@@ -864,9 +912,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.ncl}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.ncl}`)
+                        // )
                       }
                     />
                   </div>
@@ -912,9 +960,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.domicile}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.domicile}`)
+                        // )
                       }
                     />
                   </div>
@@ -956,9 +1004,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.csv}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.csv}`)
+                        // )
                       }
                     />
                   </div>
@@ -1004,9 +1052,153 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.cet}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.cet}`)
+                        // )
+                      }
+                    />
+                  </div>
+                ) : (
+                  <CloseCircleTwoTone
+                    twoToneColor="#eb2f96"
+                    style={{ fontSize: "30px", marginLeft: "40px" }}
+                  />
+                )}
+              </div>
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "15px" }}
+              name="migration"
+              label="Migration Document"
+            >
+              <div style={{ display: "flex" }}>
+                <Input
+                  type="file"
+                  placeholder="migration"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={(e) => handleDocument(e, setMigrationFile)}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  loading={loader}
+                  onClick={handleSubmit}
+                  disabled={!migrationFile}
+                  style={{
+                    // backgroundColor: "#2c3e50",
+                    marginLeft: "20px",
+                  }}
+                >
+                  Upload
+                </Button>
+                {document.migration !== null ? (
+                  <div style={{ display: "flex" }}>
+                    <CheckCircleTwoTone
+                      twoToneColor="#52c41a"
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                    />
+                    <EyeOutlined
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                      onClick={() =>
+                        // handleViewImage(
+                        generatePublicUrl(`${document.migration}`)
+                        // )
+                      }
+                    />
+                  </div>
+                ) : (
+                  <CloseCircleTwoTone
+                    twoToneColor="#eb2f96"
+                    style={{ fontSize: "30px", marginLeft: "40px" }}
+                  />
+                )}
+              </div>
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "15px" }}
+              name="deploma"
+              label="Diploma"
+            >
+              <div style={{ display: "flex" }}>
+                <Input
+                  type="file"
+                  placeholder="deploma"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={(e) => handleDocument(e, setDeplomaFile)}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  loading={loader}
+                  onClick={handleSubmit}
+                  disabled={!deplomaFile}
+                  style={{
+                    // backgroundColor: "#2c3e50",
+                    marginLeft: "20px",
+                  }}
+                >
+                  Upload
+                </Button>
+                {document.deploma !== null ? (
+                  <div style={{ display: "flex" }}>
+                    <CheckCircleTwoTone
+                      twoToneColor="#52c41a"
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                    />
+                    <EyeOutlined
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                      onClick={() =>
+                        // handleViewImage(
+                        generatePublicUrl(`${document.deploma}`)
+                        // )
+                      }
+                    />
+                  </div>
+                ) : (
+                  <CloseCircleTwoTone
+                    twoToneColor="#eb2f96"
+                    style={{ fontSize: "30px", marginLeft: "40px" }}
+                  />
+                )}
+              </div>
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "15px" }}
+              name="allotment"
+              label="Allotment"
+            >
+              <div style={{ display: "flex" }}>
+                <Input
+                  type="file"
+                  placeholder="allotment"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={(e) => handleDocument(e, setAllotmentFile)}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  loading={loader}
+                  onClick={handleSubmit}
+                  disabled={!allotmentFile}
+                  style={{
+                    // backgroundColor: "#2c3e50",
+                    marginLeft: "20px",
+                  }}
+                >
+                  Upload
+                </Button>
+                {document.allotment !== null ? (
+                  <div style={{ display: "flex" }}>
+                    <CheckCircleTwoTone
+                      twoToneColor="#52c41a"
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                    />
+                    <EyeOutlined
+                      style={{ fontSize: "30px", marginLeft: "40px" }}
+                      onClick={() =>
+                        // handleViewImage(
+                        generatePublicUrl(`${document.allotment}`)
+                        // )
                       }
                     />
                   </div>
@@ -1052,9 +1244,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.other}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.other}`)
+                        // )
                       }
                     />
                   </div>
@@ -1101,9 +1293,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.other2}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.other2}`)
+                        // )
                       }
                     />
                   </div>
@@ -1150,9 +1342,9 @@ const DocView = (props) => {
                     <EyeOutlined
                       style={{ fontSize: "30px", marginLeft: "40px" }}
                       onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.other3}`)
-                        )
+                        // handleViewImage(
+                        generatePublicUrl(`${document.other3}`)
+                        // )
                       }
                     />
                   </div>
@@ -1164,151 +1356,6 @@ const DocView = (props) => {
                 )}
               </div>
             </Form.Item>
-            <Form.Item
-              style={{ marginBottom: "15px" }}
-              name="migration"
-              label="Migration Document"
-            >
-              <div style={{ display: "flex" }}>
-                <Input
-                  type="file"
-                  placeholder="migration"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={(e) => handleDocument(e, setMigrationFile)}
-                />
-                <Button
-                  type="primary"
-                  shape="round"
-                  loading={loader}
-                  onClick={handleSubmit}
-                  disabled={!migrationFile}
-                  style={{
-                    // backgroundColor: "#2c3e50",
-                    marginLeft: "20px",
-                  }}
-                >
-                  Upload
-                </Button>
-                {document.migration !== null ? (
-                  <div style={{ display: "flex" }}>
-                    <CheckCircleTwoTone
-                      twoToneColor="#52c41a"
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                    />
-                    <EyeOutlined
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                      onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.migration}`)
-                        )
-                      }
-                    />
-                  </div>
-                ) : (
-                  <CloseCircleTwoTone
-                    twoToneColor="#eb2f96"
-                    style={{ fontSize: "30px", marginLeft: "40px" }}
-                  />
-                )}
-              </div>
-            </Form.Item>
-            <Form.Item
-              style={{ marginBottom: "15px" }}
-              name="deploma"
-              label="Diploma"
-            >
-              <div style={{ display: "flex" }}>
-                <Input
-                  type="file"
-                  placeholder="deploma"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={(e) => handleDocument(e, setDeplomaFile)}
-                />
-                <Button
-                  type="primary"
-                  shape="round"
-                  loading={loader}
-                  onClick={handleSubmit}
-                  disabled={!deplomaFile}
-                  style={{
-                    // backgroundColor: "#2c3e50",
-                    marginLeft: "20px",
-                  }}
-                >
-                  Upload
-                </Button>
-                {document.deploma !== null ? (
-                  <div style={{ display: "flex" }}>
-                    <CheckCircleTwoTone
-                      twoToneColor="#52c41a"
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                    />
-                    <EyeOutlined
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                      onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.deploma}`)
-                        )
-                      }
-                    />
-                  </div>
-                ) : (
-                  <CloseCircleTwoTone
-                    twoToneColor="#eb2f96"
-                    style={{ fontSize: "30px", marginLeft: "40px" }}
-                  />
-                )}
-              </div>
-            </Form.Item>
-            <Form.Item
-              style={{ marginBottom: "15px" }}
-              name="allotment"
-              label="Allotment"
-            >
-              <div style={{ display: "flex" }}>
-                <Input
-                  type="file"
-                  placeholder="allotment"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={(e) => handleDocument(e, setAllotmentFile)}
-                />
-                <Button
-                  type="primary"
-                  shape="round"
-                  loading={loader}
-                  onClick={handleSubmit}
-                  disabled={!allotmentFile}
-                  style={{
-                    // backgroundColor: "#2c3e50",
-                    marginLeft: "20px",
-                  }}
-                >
-                  Upload
-                </Button>
-                {document.allotment !== null ? (
-                  <div style={{ display: "flex" }}>
-                    <CheckCircleTwoTone
-                      twoToneColor="#52c41a"
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                    />
-                    <EyeOutlined
-                      style={{ fontSize: "30px", marginLeft: "40px" }}
-                      onClick={() =>
-                        handleViewImage(
-                          generatePublicUrl(`${course}/${branch}/${document.allotment}`)
-                        )
-                      }
-                    />
-                  </div>
-                ) : (
-                  <CloseCircleTwoTone
-                    twoToneColor="#eb2f96"
-                    style={{ fontSize: "30px", marginLeft: "40px" }}
-                  />
-                )}
-              </div>
-            </Form.Item>
-
             {/* <Form.Item
               style={{ marginBottom: "15px" }}
               name="required_doc"

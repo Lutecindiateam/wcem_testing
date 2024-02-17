@@ -461,7 +461,7 @@ const UploadData = (props) => {
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "15px" }}
-              label="Candidate Mobile Number"
+              label="Candidate Verified Mobile Number"
               name="mobile"
               rules={[
                 {
@@ -479,12 +479,12 @@ const UploadData = (props) => {
                 // },
               ]}
             >
-              <Input type="number" placeholder="Enter Candidate Mobile Number" />
+              <Input type="number" placeholder="Enter Candidate Verified Mobile Number" />
             </Form.Item>
 
             <Form.Item
               style={{ marginBottom: "15px" }}
-              label="Parent Mobile Number"
+              label="Parent Verified Mobile Number"
               name="p_mobile"
               rules={[
                 // {
@@ -497,7 +497,7 @@ const UploadData = (props) => {
                 },
               ]}
             >
-              <Input type="number" placeholder="Enter Parent Mobile Number" />
+              <Input type="number" placeholder="Enter Parent Verified Mobile Number" />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "15px" }}

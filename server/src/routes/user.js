@@ -70,6 +70,7 @@ const {
   editReSubmission,
 } = require("../controller/partner/reject");
 const { AddAmount, getBranchData } = require("../controller/partner/amount");
+const { sendOtp, verifyOtp } = require("../controller/partner/otp");
 
 const router = express.Router();
 
@@ -175,4 +176,7 @@ router.get("/branch/data/", getBranchData);
 router.get("/get/financial/:id", getfinancial);
 router.get("/admin/sourcewiseadm", getSourceWiseAdm);
 router.patch("/clerk/required/:id", editRequiredDoc);
+
+router.post("/send/otp/", sendOtp);
+router.post("/verify/otp/", verifyOtp);
 module.exports = router;  

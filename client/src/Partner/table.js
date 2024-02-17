@@ -171,6 +171,8 @@ const DetailsModal = ({
             placeholder="Mobile"
           // onChange={onChangeData}
           />
+          {data.verifycandidate ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
+
         </div>
         <div>
           <label htmlFor="parent_mobile">Parent Mobile:</label>
@@ -182,6 +184,7 @@ const DetailsModal = ({
             placeholder="Not Present"
           // onChange={onChangeData}
           />
+          {data.verifyparent ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
         </div>
         <div>
           <label htmlFor="f_mobile">Family Mobile:</label>

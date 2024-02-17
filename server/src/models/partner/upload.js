@@ -175,22 +175,22 @@ const applySchema = new mongoose.Schema(
       type: String,
       // required: true,
     },
-    cheque_date: {
-      type: String,
-    },
-    cheque_no: {
-      type: String,
-      trim: true
-    },
-    paid_amount: {
-      type: String,
-      trim: true
-      // required: true,
-    },
-    balance: {
-      type: String,
-      // required: true,
-    },
+    // cheque_date: {
+    //   type: String,
+    // },
+    // cheque_no: {
+    //   type: String,
+    //   trim: true
+    // },
+    // paid_amount: {
+    //   type: String,
+    //   trim: true
+    //   // required: true,
+    // },
+    // balance: {
+    //   type: String,
+    //   // required: true,
+    // },
     status: {
       type: String,
       default: false,
@@ -212,6 +212,14 @@ const applySchema = new mongoose.Schema(
     required: {
       type: String,
       default: "Not Present"
+    },
+    verifycandidate: {
+      type: Boolean,
+      default: false
+    },
+    verifyparent: {
+      type: Boolean,
+      default: false
     }
   },
 

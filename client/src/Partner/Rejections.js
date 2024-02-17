@@ -99,8 +99,8 @@ const DetailsModal = ({
             id="candidateName"
             name="candidateName"
             value={data.candidateName}
-            // placeholder={`Product Name`}
-            // onChange={onChangeData}
+          // placeholder={`Product Name`}
+          // onChange={onChangeData}
           />
         </div>
 
@@ -111,8 +111,8 @@ const DetailsModal = ({
             id="category"
             name="category"
             value={data.category}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -122,8 +122,8 @@ const DetailsModal = ({
             id="gender"
             name="gender"
             value={data.gender}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -133,8 +133,8 @@ const DetailsModal = ({
             id="course"
             name="course"
             value={data.course}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -144,8 +144,8 @@ const DetailsModal = ({
             id="branch"
             name="branch"
             value={data.branch}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -155,9 +155,11 @@ const DetailsModal = ({
             id="mobile"
             name="mobile"
             value={data.mobile}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
+
+          {data.verifycandidate ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
         </div>
         <div>
           <label htmlFor="parent_mobile">Parent Mobile:</label>
@@ -166,9 +168,11 @@ const DetailsModal = ({
             id="parent_mobile"
             name="parent_mobile"
             value={data.parent_mobile}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
+          {data.verifyparent ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
+
         </div>
         <div>
           <label htmlFor="f_mobile">Family Mobile:</label>
@@ -190,8 +194,8 @@ const DetailsModal = ({
             id="date_docSubmision"
             name="date_docSubmision"
             value={data.date_docSubmision}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -201,8 +205,8 @@ const DetailsModal = ({
             id="lastExam_passingYear"
             name="lastExam_passingYear"
             value={data.lastExam_passingYear}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -212,8 +216,8 @@ const DetailsModal = ({
             id="team"
             name="team"
             value={data.team}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -223,8 +227,8 @@ const DetailsModal = ({
             id="source"
             name="source"
             value={data.source}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -234,8 +238,8 @@ const DetailsModal = ({
             id="source"
             name="source"
             value={data.rej_name}
-            // placeholder={`NA`}
-            // onChange={onChangeData}
+          // placeholder={`NA`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -246,7 +250,7 @@ const DetailsModal = ({
             name="source"
             value={data.rej_remark}
             placeholder={`NA`}
-            // onChange={onChangeData}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -304,7 +308,7 @@ const DetailsModal = ({
               <Button
                 variant="contained"
                 onClick={submitProductForm}
-                // disabled={isSubmitDisabled}
+              // disabled={isSubmitDisabled}
               >
                 Save Incentive
               </Button>
@@ -546,7 +550,7 @@ const Rejections = (props) => {
           variant="contained"
           onClick={() => handleReSubmission(params.row.resubmit.id)}
         >
-          Resubmit  
+          Resubmit
         </Button>
       ),
     },
@@ -559,7 +563,7 @@ const Rejections = (props) => {
     branch: item.branch,
     document: {
       id: item._id,
-      course:item.course, // Replace with the actual field in your response
+      course: item.course, // Replace with the actual field in your response
       branch: item.branch, // Replace with the actual field in your response
     },
     more: {

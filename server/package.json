@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "api": "^6.1.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -23,6 +24,7 @@
     "nodemon": "^3.0.1",
     "path": "^0.12.7",
     "pm2": "^5.3.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "sendotp": "^1.2.9"
   }
 }

@@ -2,6 +2,7 @@ const fs = require("fs");
 const upload = require("../../models/partner/upload");
 const csv = require("csv-parser");
 const agent = require("../../models/partner/agent");
+const otp = require("../../models/partner/otp");
 
 
 exports.uploadProductsFromCSV = (req, res) => {
@@ -149,6 +150,12 @@ exports.uploadShopData = async (req, res) => {
     const source = source_name !== "undefined" ? source_name : "Other";
     const f_mobile = family_mobile !== "undefined" ? family_mobile : "NA";
 
+    const verify = await otp.findOne({ mobile: mobile });
+    const verifycandidate = verify ? true : false
+
+    const p_verify = await otp.findOne({ mobile: p_mobile });
+    const verifyparent = p_verify ? true : false
+
     const student = new upload({
       candidateName,
       mobile,
@@ -184,6 +191,8 @@ exports.uploadShopData = async (req, res) => {
       // stu_rec_fees,
       // documents,
       p_id,
+      verifycandidate,
+      verifyparent
     });
 
     const response = await student.save();
