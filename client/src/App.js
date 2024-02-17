@@ -11,10 +11,6 @@ import TableData from "./Partner/table";
 import Adminaction from "./Partner/Admin/adminaction";
 import PartnerAdminLogin from "./Partner/Admin/Login";
 import DemoBar from "./Partner/calender";
-
-// import Dashboard from "./Partner/dashboard";
-
-
 import QuickLinks from "./Partner/quick";
 import Page404 from "./Partner/404/404Page";
 import Account from "./Partner/account";
@@ -30,8 +26,6 @@ import Rejections from "./Partner/Rejections";
 import Successful from "./Partner/Successful";
 import Reset from "./Partner/handle"
 import Amount from "./Partner/Amount"
-import Amt_Table from "./Partner/AmountTable"
-import Graph from "./Partner/Graph";
 import VerifyOtp from "./Partner/OtpRegister";
 import Dashboard from "./Partner/dashboard"
 
