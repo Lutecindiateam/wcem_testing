@@ -43,10 +43,11 @@ mongoose
   });
 
 app.use("/api", authRoutes);
-app.use(
-  "/public",
-  express.static(path.join(__dirname, "./src/WCEM-2024-2025"))
-);
+
+// app.use(
+//   "/public",
+//   express.static(path.join(__dirname, "./src/WCEM-2024-2025"))
+// );
 
 app.get("/", (req, res) => {
   res.send("welcome");
