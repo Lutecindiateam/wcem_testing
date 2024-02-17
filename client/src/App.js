@@ -33,10 +33,8 @@ import Amount from "./Partner/Amount"
 import Amt_Table from "./Partner/AmountTable"
 import Graph from "./Partner/Graph";
 import VerifyOtp from "./Partner/OtpRegister";
-import Loading from "./Partner/Loading";
+import Dashboard from "./Partner/dashboard"
 
-
-const Dashboard = React.lazy(() => import('./Partner/dashboard'));
 
 const router = createBrowserRouter([
   {
@@ -93,10 +91,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:
-      <Suspense fallback={<Loading />}>
-        <Dashboard />
-      </Suspense>
+    element: <Dashboard />
     ,
   },
   {
