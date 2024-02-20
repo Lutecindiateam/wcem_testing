@@ -7,29 +7,30 @@ import { userLogout } from "../Redux/actions";
 
 const Logout = (props) => {
   const navigate = useNavigate();
+  props.userLogout();
+  navigate("/");
+  // useEffect(() => {
+  //   const showConfirmationDialog = async () => {
+  //     const result = await Swal.fire({
+  //       title: "Are you sure?",
+  //       icon: "question",
+  //       showCancelButton: true,
+  //       confirmButtonColor: "#3085d6",
+  //       cancelButtonColor: "#d33",
+  //       confirmButtonText: "Yes, logout!",
+  //     });
 
-  useEffect(() => {
-    const showConfirmationDialog = async () => {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, logout!",
-      });
+  //     if (result.isConfirmed) {
+  //       props.userLogout();
+  //       navigate("/");
+  //     } else {
+  //       // User clicked cancel or closed the dialog
+  //       navigate("/dashboard"); // Redirect to a different page or handle as needed
+  //     }
+    // };
 
-      if (result.isConfirmed) {
-        props.userLogout();
-        navigate("/");
-      } else {
-        // User clicked cancel or closed the dialog
-        navigate("/dashboard"); // Redirect to a different page or handle as needed
-      }
-    };
-
-    showConfirmationDialog();
-  }, [navigate, props]);
+    // showConfirmationDialog();
+  // }, [navigate, props]);
 
   return null;
 };

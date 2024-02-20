@@ -137,16 +137,19 @@ const VerifyOtp = () => {
                 style={{ fontWeight: 'bold', fontSize: '1.5rem', textAlign: 'center' }}
               >
                 Enter your OTP
+                , sent out to {ph}.
               </label>
-              <OtpInput
-                value={otp}
-                onChange={setOtp}
-                OTPLength={4}
-                otpType="number"
-                disabled={false}
-                autoFocus
-                className="opt-container "
-              ></OtpInput>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <OtpInput
+                  value={otp}
+                  onChange={setOtp}
+                  OTPLength={4}
+                  otpType="number"
+                  disabled={false}
+                  autoFocus
+                  className="opt-container "
+                ></OtpInput>
+              </div>
               <button
                 onClick={onOTPVerify}
                 style={{ backgroundColor: '#38a169', width: '100%', display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', padding: '0.625rem 0', color: 'white', borderRadius: '0.5rem', cursor: 'pointer' }}

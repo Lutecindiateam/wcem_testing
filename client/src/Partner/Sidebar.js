@@ -74,7 +74,6 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
 
   useEffect(() => {
     let loginData = props.data.loginData;
-    // console.log(loginData);
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
         setUser(loginData.data.data);
@@ -142,18 +141,6 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
             </ListItemButton>
           </ListItem>
         ) : null}
-        {/* {
-          user.role === "superadmin" ? (
-            <ListItem key="graph" disablePadding>
-              <ListItemButton to="/graph">
-                <ListItemIcon>
-                  <AutoAwesomeIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText primary="Check" style={{ color: "white" }} />
-              </ListItemButton>
-            </ListItem>
-          ) : null
-        } */}
         {user.role === "clerk" && (
           <ListItem key="upload" disablePadding>
             <ListItemButton to="/upload">
@@ -207,17 +194,6 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
                 />
               </ListItemButton>
             </ListItem>
-            {/* <ListItem key="role" disablePadding>
-              <ListItemButton to="/create">
-                <ListItemIcon>
-                  <AddModeratorIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Create Role"
-                  style={{ color: "white" }}
-                />
-              </ListItemButton>
-            </ListItem> */}
           </>
         ) : null}
         <ListItem key="Logout" disablePadding>
@@ -248,23 +224,6 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
             </ListItem>
           </>
         ) : null}
-
-        {/*<ListItem key="report" disablePadding>
-          <ListItemButton to="*">
-            <ListItemIcon>
-              <FlagOutlined style={{ color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Report" style={{ color: "white" }} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key="setting" disablePadding>
-          <ListItemButton to="*">
-            <ListItemIcon>
-              <SettingOutlined style={{ color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Setting" style={{ color: "white" }} />
-          </ListItemButton>
-        </ListItem> */}
       </List>
       <Divider />
     </div>

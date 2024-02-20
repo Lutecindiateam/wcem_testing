@@ -10,11 +10,15 @@ import { bindActionCreators } from "redux";
 import { requestAdminLogin, userLogout } from "../../Redux/actions";
 import Swal from "sweetalert2";
 import "./Admin.css";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 const PartnerAdminLogin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorpassword, seterrorpassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle show/hide password
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
@@ -38,7 +42,7 @@ const PartnerAdminLogin = (props) => {
     let loginData = props.data.loginData;
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
-        Swal.fire("Good job!", "Login successfully.", "success");
+        Swal.fire("Log In!", "Login successfully.", "success");
         navigate("/dashboard");
       } else {
         Swal.fire("Sorry!", loginData.data.error, "error");
@@ -98,7 +102,7 @@ const PartnerAdminLogin = (props) => {
             <TextField
               fullWidth
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"} // Show/hide password based on state
               placeholder="Enter password"
               onChange={(e) => setPassword(e.target.value)}
               margin="normal"
@@ -109,6 +113,14 @@ const PartnerAdminLogin = (props) => {
                   color: "white", // Set the border radius
                 },
                 notched: false, // Remove the notch border
+                endAdornment: (
+                  <Button
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ color: "white" }}
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </Button>
+                ),
               }}
               InputLabelProps={{
                 style: {

@@ -133,28 +133,13 @@ const router = createBrowserRouter([
     element: <Amount />
   },
   {
-    path: "/optregister",
+    path: "/otpregister",
     element: <VerifyOtp />
   },
   // {
-  //   path: "/graph",
-  //   element: <Graph />
+  //   path: "/create",
+  //   element: <CreateRole />,
   // },
-  // {
-  //   path: "/fanance/:id",
-  //   element: <Amt_Table />
-  // },
-  // {
-  //   path:"/pie",
-  //   element:<Pie />
-  // },
-
-  //Admin
-
-  {
-    path: "/create",
-    element: <CreateRole />,
-  },
 ]);
 
 export default router;

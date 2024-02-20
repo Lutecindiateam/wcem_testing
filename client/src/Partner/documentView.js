@@ -299,6 +299,7 @@ const DocView = (props) => {
         const result = await Storage.put(key, tcFile.file, {
           contentType: tcFile.file.type, // Provide the content type if known
         });
+        console.log(result);
         formData.append("file", result.key);
         formData.append("name", tcFile.name);
       }

@@ -10,12 +10,16 @@ import { bindActionCreators } from "redux";
 import { requestLogin, userLogout } from "../Redux/actions";
 import Swal from "sweetalert2";
 import "./signup.css";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 const PartnerLogin = (props) => {
   // export default function PartnerLogin(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorpassword, seterrorpassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle show/hide password
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
@@ -107,7 +111,7 @@ const PartnerLogin = (props) => {
             <TextField
               fullWidth
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"} // Show/hide password based on state
               placeholder="Enter password"
               onChange={(e) => setPassword(e.target.value)}
               margin="normal"
@@ -118,6 +122,14 @@ const PartnerLogin = (props) => {
                   color: "white", // Set the border radius
                 },
                 notched: false, // Remove the notch border
+                endAdornment: (
+                  <Button
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ color: "white" }}
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </Button>
+                ),
               }}
               InputLabelProps={{
                 style: {
@@ -155,28 +167,28 @@ const PartnerLogin = (props) => {
                 Login
               </Button>
             </div>
-            <div style={{display: "flex" , justifyContent: "space-between" }}>
-            <Typography
-              variant="body2"
-              align="right"
-              style={{ color: "white", fontSize: "20px" }}
-            >
-              For Guest{" "}
-              <a href="/login" style={{ color: "white" }}>
-                Login
-              </a>
-            </Typography>
-            
-            <Typography
-              variant="body2"
-              align="right"
-              style={{ color: "white", fontSize: "20px" }}
-            >
-              For Admin{" "}
-              <a href="/partner/admin" style={{ color: "white" }}>
-                Login
-              </a>
-            </Typography>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography
+                variant="body2"
+                align="right"
+                style={{ color: "white", fontSize: "20px" }}
+              >
+                For Guest{" "}
+                <a href="/login" style={{ color: "white" }}>
+                  Login
+                </a>
+              </Typography>
+
+              <Typography
+                variant="body2"
+                align="right"
+                style={{ color: "white", fontSize: "20px" }}
+              >
+                For Admin{" "}
+                <a href="/partner/admin" style={{ color: "white" }}>
+                  Login
+                </a>
+              </Typography>
             </div>
             {/* <Typography
               variant="body2"

@@ -87,23 +87,24 @@ const Dashboard = ({ information, ...props }) => {
     }
   }, [props.candidate.loginData, props.candidate.applyJobData]);
 
-  useEffect(() => {
-    // console.log("hello");
-    let empLoginData = props.employee.empLoginData;
-    if (empLoginData !== undefined) {
-      if (empLoginData?.data?.status == "success") {
-        setUser(empLoginData.data.data);
-        props.requestGetCandidate({
-          id: empLoginData.data.data.id,
-          role: empLoginData.data.data.role,
-          token: empLoginData.data.data.token,
-        });
-        props.requestCandidateForJob({
-          id: empLoginData.data.data.id,
-        });
-      }
-    }
-  }, [props.employee.empLoginData]);
+  // useEffect(() => {
+  //   // console.log("hello");
+  //   let empLoginData = props.employee.empLoginData;
+  //   console.log(empLoginData);
+  //   if (empLoginData !== undefined) {
+  //     if (empLoginData?.data?.status == "success") {
+  //       setUser(empLoginData.data.data);
+  //       props.requestGetCandidate({
+  //         id: empLoginData.data.data.id,
+  //         role: empLoginData.data.data.role,
+  //         token: empLoginData.data.data.token,
+  //       });
+  //       props.requestCandidateForJob({
+  //         id: empLoginData.data.data.id,
+  //       });
+  //     }
+  //   }
+  // }, [props.employee.empLoginData]);
 
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
