@@ -14,7 +14,8 @@ import {
   requestGetApplyJob,
   requestCandidateForJob,
   requestAdminCategoryJob,
-  requestJobs
+  requestJobs,
+  requestEmpJoblist
 } from "../Redux/actions";
 import { connect } from "react-redux";
 import Pie from "./pie";
@@ -22,6 +23,7 @@ import Bar from "./bar";
 import DemoBar from "./calender";
 import { Navigate } from "react-router-dom";
 import Graph from "./Graph";
+import AgentGraph from "./AgentGraph";
 
 const Dashboard = ({ information, ...props }) => {
   const [user, setUser] = useState({});
@@ -87,24 +89,33 @@ const Dashboard = ({ information, ...props }) => {
     }
   }, [props.candidate.loginData, props.candidate.applyJobData]);
 
-  // useEffect(() => {
-  //   // console.log("hello");
-  //   let empLoginData = props.employee.empLoginData;
-  //   console.log(empLoginData);
-  //   if (empLoginData !== undefined) {
-  //     if (empLoginData?.data?.status == "success") {
-  //       setUser(empLoginData.data.data);
-  //       props.requestGetCandidate({
-  //         id: empLoginData.data.data.id,
-  //         role: empLoginData.data.data.role,
-  //         token: empLoginData.data.data.token,
-  //       });
-  //       props.requestCandidateForJob({
-  //         id: empLoginData.data.data.id,
-  //       });
-  //     }
-  //   }
-  // }, [props.employee.empLoginData]);
+  useEffect(() => {
+    // console.log("hello");
+    let empLoginData = props.employee.empLoginData;
+    if (empLoginData !== undefined) {
+      if (empLoginData?.data?.status == "success") {
+        setUser(empLoginData.data.data);
+        props.requestEmpJoblist({
+          id: empLoginData.data.data.id,
+          token: empLoginData.data.data.token,
+        });
+        // props.requestCandidateForJob({
+        //   id: empLoginData.data.data.id,
+        // });
+      }
+    }
+  }, [props.employee.empLoginData]);
+
+  useEffect(() => {
+    let empJobListData = props.employee.empJobListData;
+    console.log(empJobListData);
+    if (empJobListData !== undefined) {
+      if (empJobListData?.data?.status === "success") {
+        setList(empJobListData.data.data.response);
+      }
+    }
+  }, [props?.employee?.empJobListData]);
+
 
   useEffect(() => {
     let getCandidateData = props.candidate.getCandidateData;
@@ -214,6 +225,7 @@ const Dashboard = ({ information, ...props }) => {
     props.candidate.loginData,
   ]);
 
+
   return (
     <Layout>
       <Fragment>
@@ -297,9 +309,16 @@ const Dashboard = ({ information, ...props }) => {
                     <div className="media d-flex">
                       <div className="media-body text-left">
                         <h3 className="">
-                          {rejList
-                            ? rejList.length
-                            : 0}
+                          {user.role === "agent" ? (
+                            
+                            list.filter(post => post.rejection !== null)
+                              .length
+                              ) :
+                            (
+                              rejList
+                                ? rejList.length
+                                : 0)
+                          }
                         </h3>
                         <span className="">Rejected Application</span>
                       </div>
@@ -350,6 +369,13 @@ const Dashboard = ({ information, ...props }) => {
           {user.role === "superadmin" ? (
             <Graph />
           ) : null}
+          {
+            user.role === "agent" ? (
+              <AgentGraph 
+              id={user.id}
+              />
+            ) : null
+          }
           {/* <div>
             <Graph />
             
@@ -382,7 +408,8 @@ const mapDispatchToProps = (dispatch) =>
       requestGetApplyJob,
       requestCandidateForJob,
       requestAdminCategoryJob,
-      requestJobs
+      requestJobs,
+      requestEmpJoblist
     },
     dispatch
   );

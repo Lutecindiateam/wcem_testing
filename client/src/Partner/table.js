@@ -25,7 +25,8 @@ import {
   requestAdminEditSkill,
   requestAdminAddDegree,
   requestAdminCompanyJob,
-  requestAdminFunctionalCandidate
+  requestAdminFunctionalCandidate,
+  requestAdminAddSize
 } from "../Redux/actions";
 import { connect } from "react-redux";
 import Swal from "sweetalert2";
@@ -38,6 +39,13 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Amt_Table from "./AmountTable";
 // import { Input } from "@material-ui/core";
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const style = {
   position: "absolute",
@@ -63,9 +71,91 @@ const DetailsModal = ({
   setData,
   user,
   onSubmit,
-  balance_money
+  balance_money,
+  props
 }) => {
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
+  const [stage, setStage] = useState('');
+  const [document, setDocument] = useState(false);
+  const [documentDeficiency, setDocumentDeficiency] = useState(false);
+  const [scholarship, setScholarship] = useState(false);
+  const [examForm, setExamForm] = useState(false);
+  const [exam, setExam] = useState(false);
+  const [attendance, setAttendance] = useState(false);
+
+  const handleChange = (event) => {
+    setStage(event.target.value);
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    switch (name) {
+      case 'document':
+        setDocument(checked);
+        break;
+      case 'documentDeficiency':
+        setDocumentDeficiency(checked);
+        break;
+      case 'scholarship':
+        setScholarship(checked);
+        break;
+      case 'examForm':
+        setExamForm(checked);
+        break;
+      case 'exam':
+        setExam(checked);
+        break;
+      case 'attendance':
+        setAttendance(checked);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleSubmit = async () => {
+    let allCheckboxesSelected;
+
+    if (stage === 'Stage1') {
+      allCheckboxesSelected = true;
+    } else if (stage === 'Stage2') {
+      allCheckboxesSelected = document && documentDeficiency;
+    } else if (stage === 'Stage3') {
+      allCheckboxesSelected = scholarship && examForm && exam && attendance;
+    } else {
+      // Handle invalid stage
+      alert('Invalid stage');
+      return;
+    }
+
+    if (allCheckboxesSelected) {
+      props.requestAdminAddSize({
+        id: id,
+        stage
+      });
+    } else {
+      // Handle case where not all checkboxes are selected
+      alert('Please select all checkboxes');
+    }
+  };
+
+  useEffect(() => {
+    let addSizeData = props.data.addSizeData;
+    if (addSizeData !== undefined) {
+      if (addSizeData?.data?.status === "success") {
+        alert("Stage Added Successfully")
+        setStage('');
+        setDocument(false);
+        setDocumentDeficiency(false);
+        setScholarship(false);
+        setExamForm(false);
+        setExam(false);
+        setAttendance(false);
+        props.data.addSizeData = undefined;
+        // setAmount(addSizeData.data.data);
+      }
+    }
+  }, [props.data.addSizeData])
 
   useEffect(() => {
     // Check if all three input values are present
@@ -95,6 +185,10 @@ const DetailsModal = ({
     // handleClose();
   };
 
+  // const handleChange = (event) => {
+  //   setStage(event.target.value);
+  // };
+  // console.log(stage);
   return (
     <Modal
       open={open}
@@ -171,7 +265,7 @@ const DetailsModal = ({
             placeholder="Mobile"
           // onChange={onChangeData}
           />
-          {data.verifycandidate ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
+          {/* {data.verifycandidate ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)} */}
 
         </div>
         <div>
@@ -184,7 +278,7 @@ const DetailsModal = ({
             placeholder="Not Present"
           // onChange={onChangeData}
           />
-          {data.verifyparent ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)}
+          {/* {data.verifyparent ? <span style={{ color: "green" }}>Verified</span> : (<span style={{ color: "red" }}>Not Verified</span>)} */}
         </div>
         <div>
           <label htmlFor="f_mobile">Family Mobile:</label>
@@ -254,7 +348,44 @@ const DetailsModal = ({
           // onChange={onChangeData}
           />
         </div>
-        <br />
+        <div>
+          <label htmlFor="required">Stage:</label>
+          <Input
+            label="NA"
+            id="stage"
+            name="stage"
+            value={data.stage}
+            placeholder={`NA`}
+          // onChange={onChangeData}
+          />
+        </div>
+        {user.role === "agent" ? (
+          <>
+            <div>
+              <label htmlFor="source">Rejected By:</label>
+              <Input
+                label="NA"
+                id="source"
+                name="source"
+                value={data.rej_name}
+              // placeholder={`NA`}
+              // onChange={onChangeData}
+              />
+            </div>
+            <div>
+              <label htmlFor="source">Remark:</label>
+              <Input
+                label="NA"
+                id="source"
+                name="source"
+                value={data.rej_remark}
+                placeholder={`NA`}
+              // onChange={onChangeData}
+              />
+            </div>
+          </>
+        ) : null}
+
         {user.role === "editor" && user.value === true
           // || user.role === "admin" || user.role === "superadmin"
           ? (
@@ -326,9 +457,140 @@ const DetailsModal = ({
               <br />
             </>
           ) : null}
+        {user.role === 'editor' && user.value === false && (
+          <div>
+            <br />
+            <br />
+            <Typography variant="h5" component="h2" style={{ display: 'flex', justifyContent: 'center' }}>
+              Add Stage
+            </Typography>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Select Stage</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={stage}
+                label="Stage"
+                onChange={handleChange}
+              >
+                <MenuItem value={'Stage1'}>Stage1</MenuItem>
+                <MenuItem value={'Stage2'}>Stage2</MenuItem>
+                <MenuItem value={'Stage3'}>Stage3</MenuItem>
+              </Select>
+            </FormControl>
+            {stage === 'Stage2' && (
+              <div>
+                <br />
+                <br />
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={document} onChange={handleCheckboxChange} name="document" />}
+                  label="All Documents"
+                />
+                <br />
+                <br />
+                <Typography>Document deficiency on allotment letter</Typography>
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={documentDeficiency} onChange={handleCheckboxChange} name="documentDeficiency" />}
+                  label="No"
+                />
+              </div>
+            )}
+            {stage === 'Stage3' && (
+              <div>
+                <br />
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={scholarship} onChange={handleCheckboxChange} name="scholarship" />}
+                  label="Scholarship"
+                />
+                <br />
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={examForm} onChange={handleCheckboxChange} name="examForm" />}
+                  label="Exam Form"
+                />
+                <br />
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={exam} onChange={handleCheckboxChange} name="exam" />}
+                  label="Exam"
+                />
+                <br />
+                <FormControlLabel
+                  required
+                  control={<Checkbox checked={attendance} onChange={handleCheckboxChange} name="attendance" />}
+                  label="Attendance"
+                />
+              </div>
+            )}
+            <Button variant="contained" onClick={handleSubmit} disabled={!stage}>
+              Submit
+            </Button>
+          </div>
+        )}
+
+        {/* {
+          user.role === "editor" && user.value === false ? (
+            <div>
+              <br />
+              <Typography variant="h5" component="h2" style={{ display: "flex", justifyContent: "center" }}>
+                Add Stages
+              </Typography>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Select Stage</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={stage}
+                    label="Stage"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"Stage1"}>Stage1</MenuItem>
+                    <MenuItem value={"Stage2"}>Stage2</MenuItem>
+                    <MenuItem value={"Stage3"}>Stage3</MenuItem>
+                  </Select>
+                </FormControl>
+                {
+                  stage === "Stage2" ? (
+                    <>
+                      <br />
+                      <br />
+                      <FormControlLabel required control={<Checkbox />} label="All Documents" />
+                      <br />
+                      <br />
+                      <Typography> Document deficiency on allotment letter </Typography>
+                      <FormControlLabel required control={<Checkbox />} label="No" />
+                    </>
+                  ) : stage === "Stage3" ? (
+                    <>
+                    <br />
+                      <FormControlLabel required control={<Checkbox />} label="Scholarship" /><br />
+                      <FormControlLabel required control={<Checkbox />} label="Exam Form" /><br />
+                      <FormControlLabel required control={<Checkbox />} label="Exam" /><br />
+                      <FormControlLabel required control={<Checkbox />} label="Attendance" />
+
+                    </>
+                  ) : null
+
+                }
+
+              </Box>
+            </div>
+          ) : null
+        } */}
+        <br />
         {user.role === "editor" || user.role === "admin" || user.role === "superadmin" ? (
           <div>
             <h6>*Current Balance :  ₹ {balance_money || balance_money === 0 ? (balance_money) : (data.adv_payble_amt)} /-</h6>
+          </div>
+        ) : (null)
+        }
+        {user.role === "editor" || user.role === "admin" || user.role === "superadmin" || user.role === "agent" ? (
+          <div>
+            {/* <h6>*Current Balance :  ₹ {balance_money || balance_money === 0 ? (balance_money) : (data.adv_payble_amt)} /-</h6> */}
             <br />
             <Amt_Table id={id} />
           </div>
@@ -361,6 +623,7 @@ const TableData = (props) => {
     setId(null);
     setOpen(false);
     props.data.functionalCanditateData = undefined;
+    props.employee.empAddJobData = undefined;
   };
 
   useEffect(() => {
@@ -407,15 +670,20 @@ const TableData = (props) => {
     }
   };
 
-  const handleEditorApproval = (EditID) => {
+  const handleEditorApproval = (EditID, stage) => {
     const userConfirmed = window.confirm(
       "Are you sure you want to proceed with the approval?"
     );
     if (userConfirmed) {
-      props.requestAdminEditFunctional({
-        id: EditID,
-        token: user.token,
-      });
+      if (stage) {
+        props.requestAdminEditFunctional({
+          id: EditID,
+          token: user.token,
+        });
+      } else {
+        alert("Add Stage Before Proceeding")
+      }
+
     } else {
       console.log("User canceled the action.");
     }
@@ -710,6 +978,7 @@ const TableData = (props) => {
     form.append("cheque_date", values.cheque_date);
     form.append("cheque_no", values.cheque_no);
     form.append("adm_id", id);
+    form.append("source_id", data.source_id);
     // console.log("Form submitted with data:", formData);
     // You can dispatch an action or perform any other logic
     // console.log(id);
@@ -795,6 +1064,7 @@ const TableData = (props) => {
     props.data.editTypeData,
     props.data.editCurrencyData,
     props.data.editSkillData,
+    props.data.addSizeData
   ]);
 
   useEffect(() => {
@@ -1161,7 +1431,7 @@ const TableData = (props) => {
         flex: 1,
         renderCell: (params) => (
           <Button onClick={() => handleOpen(params.row.document.id)}>
-            More Details..
+            Add More Details..
           </Button>
         ),
       },
@@ -1228,7 +1498,7 @@ const TableData = (props) => {
           ) : params.row.approval.status === "editor" ? (
             <Button
               variant="contained"
-              onClick={() => handleEditorApproval(params.row.approval.id)}
+              onClick={() => handleEditorApproval(params.row.approval.id, params.row.approval.stage)}
             >
               Approve
             </Button>
@@ -1450,6 +1720,9 @@ const TableData = (props) => {
           ),
       });
     } else if (user.role === "agent") {
+
+      roleSpecificColumns.push({ field: "stage", headerName: "Stage", flex: 1 },)
+
       roleSpecificColumns.push({
         field: "agent",
         headerName: "Status",
@@ -1470,14 +1743,17 @@ const TableData = (props) => {
               Rejected
             </Button>
           ) : (
-            <Button variant="contained" disabled={true}>
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "yellow" }}
+              disabled={true}>
               Processing
             </Button>
           )
-
       });
-    }
 
+
+    }
     return [...commonColumns, ...roleSpecificColumns];
   };
 
@@ -1500,6 +1776,7 @@ const TableData = (props) => {
       approval: {
         id: item._id,
         status: item.status,
+        stage: item.stage
       },
     };
 
@@ -1549,7 +1826,8 @@ const TableData = (props) => {
             id: item._id,
             status: item.status,
             rejection: item.rejection,
-          }
+          },
+          stage: item.stage,
         };
 
     return { ...total, ...limited };
@@ -1578,6 +1856,7 @@ const TableData = (props) => {
         user={user}
         onSubmit={onSubmit}
         balance_money={balance_money}
+        props={props}
       />{" "}
     </Layout>
   );
@@ -1612,7 +1891,8 @@ const mapDispatchToProps = (dispatch) =>
       requestAdminEditSkill,
       requestAdminAddDegree,
       requestAdminCompanyJob,
-      requestAdminFunctionalCandidate
+      requestAdminFunctionalCandidate,
+      requestAdminAddSize
     },
     dispatch
   );

@@ -88,7 +88,6 @@ export const recentlyJob = (obj) => {
 };
 
 export const getCandidate = (obj) => {
-  // console.log(obj);
   return axios
     .get("/specific/shopData/" + obj.id, obj, {
       headers: { Authorization: `Bearer ${obj.token}` },
@@ -275,7 +274,6 @@ export const getComment = (obj) => {
 };
 
 export const candidateresume = (obj) => {
-  console.log(obj);
   return axios
     .patch("/clerk/required/" + obj.id, obj, {
       headers: { Authorization: `Bearer ${obj.token}` },
@@ -284,6 +282,60 @@ export const candidateresume = (obj) => {
       return response;
     })
     .catch((err) => {
+      return err.response;
+    });
+};
+
+export const addJob = (obj) => {
+  return axios
+    .get("/staff/amount/" + obj.id, {
+      headers: { Authorization: `Bearer ${obj.token}` },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const empJoblist = (obj) => {
+  return axios
+    .get("/staff/applications/" + obj.id, {
+      headers: { Authorization: `Bearer ${obj.token}` },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const approve = (obj) => {
+  return axios
+    .get("/stage/graph/" + obj.id)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const interviewApprove = (obj) => {
+  return axios
+    .get("/amoun/graph/"+ obj.id, {
+      headers: { Authorization: `Bearer ${obj.token}` },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
       return err.response;
     });
 };
@@ -302,20 +354,7 @@ export const googlelogin = (obj) => {
     });
 };
 
-export const empJoblist = (obj) => {
-  // console.log(obj.id, "obj ::",obj);
-  return axios
-    .get("/clerk/rejApplication", {
-      headers: { Authorization: `Bearer ${obj.token}` },
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
+
 // export const deleteAccount = (obj) => {
 //   return axios
 //     .post("/candidate/removecandidates/" + obj.id, obj.data, {
@@ -407,8 +446,6 @@ export const emplogo = (obj) => {
     });
 };
 
-
-
 export const getFormFields = (obj) => {
   // console.log(obj);
   return axios
@@ -424,20 +461,7 @@ export const getFormFields = (obj) => {
     });
 };
 
-export const addJob = (obj) => {
-  // console.log(obj.data);
-  return axios
-    .post("/employer/postjob", obj.data, {
-      headers: { Authorization: `Bearer ${obj.token}` },
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
+
 
 export const editJob = (obj) => {
   return axios
@@ -624,34 +648,6 @@ export const confirmInterview = (obj) => {
 export const notconfirmInterview = (obj) => {
   return axios
     .post("/reinterview/" + obj.id, obj.data)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
-
-export const approve = (obj) => {
-  return axios
-    .post("/employer/approve/" + obj.id, obj.data, {
-      headers: { Authorization: `Bearer ${obj.token}` },
-    })
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
-
-export const interviewApprove = (obj) => {
-  return axios
-    .post("/interviewApprove", obj.data, {
-      headers: { Authorization: `Bearer ${obj.token}` },
-    })
     .then((response) => {
       return response;
     })

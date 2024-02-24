@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Table, TableHead, TableBody, TableRow, TableCell, Button } from '@mui/material';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { requestAdminFunctionalCandidate } from "../Redux/actions";
+import { requestAdminFunctionalCandidate, requestAddJob } from "../Redux/actions";
 
 /**
 * @author
@@ -33,6 +33,28 @@ const Amt_Table = (props) => {
         }
     }, [props.data.loginData]);
 
+    useEffect(() => {
+        let empLoginData = props.employee.empLoginData;
+        if (empLoginData !== undefined) {
+            if (empLoginData?.data?.status == "success") {
+                setUser(empLoginData.data.data);
+                props.requestAddJob({
+                    id: props.id,
+                    // token: loginData.data.data.token,
+                });
+            }
+        }
+    }, [props.employee.empLoginData]);
+
+    
+    useEffect(() => {
+        let empAddJobData = props.employee.empAddJobData;
+        if (empAddJobData !== undefined) {
+            if (empAddJobData?.data?.status === "success") {
+                setData(empAddJobData.data.data);
+            }
+        }
+    }, [props.employee.empAddJobData])
 
     useEffect(() => {
         let functionalCanditateData = props.data.functionalCanditateData;
@@ -95,11 +117,12 @@ const Amt_Table = (props) => {
 const mapStateToProps = (state) => {
     return {
         candidate: state.candidate,
+        employee:state.employee,
         data: state.data
     };
 };
 
 const mapDispatchToProps = (dispatch) =>
-    bindActionCreators({ requestAdminFunctionalCandidate }, dispatch);
+    bindActionCreators({ requestAdminFunctionalCandidate, requestAddJob }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Amt_Table);

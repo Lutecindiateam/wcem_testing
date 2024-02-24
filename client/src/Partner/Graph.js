@@ -38,7 +38,6 @@ const Graph = (props) => {
 
     useEffect(() => {
         let companyJobData = props.data.companyJobData;
-        console.log(companyJobData);
         if (companyJobData !== undefined) {
             if (companyJobData?.data?.status == "success") {
                 setcompanyJobData(companyJobData.data.data);

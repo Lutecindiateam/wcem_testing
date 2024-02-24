@@ -1,7 +1,7 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown, Menu, Segmented, Table, Input } from "antd";
+import { Dropdown, Menu, Segmented, Table, Input, Spin } from "antd";
 import { useEffect } from "react";
 import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import AgentGraph from "./AgentGraph";
 // import { Input } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -99,8 +101,8 @@ const DetailsModal = ({
             id="role"
             name="role"
             value={data.role}
-            // placeholder={`Quantity`}
-            // onChange={onChangeData}
+          // placeholder={`Quantity`}
+          // onChange={onChangeData}
           />
         </div>
         <div>
@@ -140,15 +142,15 @@ const Reset = (props) => {
   const [id, setId] = useState(null);
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [graphId, setGraphId] = useState(null);
   const [total, setTotal] = useState(0);
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [status, setStatus] = useState("true");
   const [open, setOpen] = React.useState(false);
   const [editorStatus, setEditorStatus] = useState(null);
-
-  const newArray = list.filter((item) => item.status === "editor");
+  const [spinning, setSpinning] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpen = (id) => {
     setId(id);
@@ -173,8 +175,13 @@ const Reset = (props) => {
     }
   }
 
+  const handleGraph = (id) => {
+    // setSpinning(true);
+    setGraphId(id);
+    // navigate(`/handle/${id}`)
+  }
+
   const onSubmit = (values) => {
-    console.log(values);
     // Handle form submission here
     let form = new FormData();
     form.append("email", values.email);
@@ -191,7 +198,25 @@ const Reset = (props) => {
     //   console.log(`${key}: ${value}`);
     // }
   };
-  
+  useEffect(() => {
+    let loginData = props.data.loginData;
+    if (loginData !== undefined) {
+      if (loginData?.data?.status == "success") {
+        if (
+          loginData?.data?.data.role === "admin" ||
+          loginData?.data?.data.role === "editor" ||
+          loginData?.data?.data.role === "superadmin"
+        ) {
+          props.requestGetJobAlert({
+            // id: loginData.data.data.id,
+            // role: loginData.data.data.role,
+            token: loginData.data.data.token,
+          });
+        }
+      }
+    }
+  }, [props?.data?.loginData, props.candidate.candidatePictureData]);
+
   useEffect(() => {
     let loginData = props.candidate.loginData;
     if (loginData !== undefined) {
@@ -240,6 +265,16 @@ const Reset = (props) => {
         </Button>
       ),
     },
+    {
+      field: "graph",
+      headerName: "View Graph",
+      flex: 1,
+      renderCell: (params) => (
+        <Button onClick={() => handleGraph(params.row.more.id)}>
+          View Graph
+        </Button>
+      ),
+    },
   ];
 
   const rows = list.map((item, index) => ({
@@ -249,19 +284,31 @@ const Reset = (props) => {
     more: {
       id: item._id,
     },
+    graph: {
+      id: item._id
+    }
   }));
 
   return (
     <Layout>
       <div style={{ height: "100%", width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          components={{
-            Toolbar: GridToolbar,
-          }}
-        />
+        <div style={{ marginBottom: "20px" }}> {/* Add margin bottom to create space */}
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            components={{
+              Toolbar: GridToolbar,
+            }}
+          />
+        </div>
+        {
+          graphId ? (
+            <AgentGraph
+              id={graphId}
+            />
+          ) : null
+        }
       </div>
       <DetailsModal
         id={id}

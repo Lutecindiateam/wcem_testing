@@ -132,10 +132,14 @@ const router = createBrowserRouter([
     path: "/amount",
     element: <Amount />
   },
-  {
-    path: "/otpregister",
-    element: <VerifyOtp />
-  },
+  // {
+  //   path: "/graph/:id",
+  //   element: <
+  // }
+  // {
+  //   path: "/otpregister",
+  //   element: <VerifyOtp />
+  // },
   // {
   //   path: "/create",
   //   element: <CreateRole />,

@@ -98,10 +98,25 @@ exports.getSpecShopData = async (req, res) => {
   }
 };
 
+exports.getStaffdata = async (req, res) => {
+  try {
+    const response = await upload.find({ source_id: req.params.id, });
+    // const response = await upload.find({ rejection: null });
+    if (response.length > 0) {
+      return res.status(200).json({
+        data: { response },
+        status: "success",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Internal problem" });
+  }
+};
+
 exports.addIntensive = async (req, res) => {
   try {
     let balance;
-    const { adv_payble_amt, paid_amount, cheque_date, cheque_no, adm_id } = req.body;
+    const { adv_payble_amt, paid_amount, cheque_date, cheque_no, adm_id, source_id } = req.body;
     const existing = await financial
       .findOne({ adm_id: adm_id }).limit(1).
       sort({ createdAt: -1 })
@@ -119,27 +134,11 @@ exports.addIntensive = async (req, res) => {
       cheque_no,
       adm_id,
       balance,
-      system_date
+      system_date,
+      source_id
     });
 
     const response = await student.save();
-
-    // const response = await financial.create(req.body);
-    // const response = await upload.findOneAndUpdate(
-    //   { _id: req.params.id },
-    //   {
-    //     $set: {
-    //       // adv_payble_amt: req.body.adv_payble_amt,
-    //       paid_amount: req.body.paid_amount,
-    //       balance: req.body.balance,
-    //       cheque_no: req.body.cheque_no,
-    //       cheque_date: req.body.cheque_date
-
-    //     },
-    //   },
-    //   { new: true }
-    // );
-    // console.log(response);
 
     if (response) {
       return res.status(200).json({
@@ -167,10 +166,10 @@ exports.getfinancial = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log("hello");
     return res.status(500).json({ message: "Internal problem" });
   }
 };
+
 
 
 //beney paul sir
@@ -341,6 +340,127 @@ exports.getSourceWiseAdm = async (req, res) => {
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error'
+    });
+  }
+}
+
+exports.getStagegraph = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const adms = await upload.aggregate([
+      {
+        $match: { source_id: id } // Filter documents where status is true
+      },
+      {
+        $group: {
+          _id: { source_id: '$source_id', stage: { $ifNull: ['$stage', 'Pending'] } },
+          total_stagewise: { $sum: 1 }
+        }
+      },
+      { $sort: { total_stagewise: -1 } },
+      // { $limit: 5 }
+    ]);
+
+    const formattedAdms = adms.map(job => ({
+      source_id: job._id.source_id,
+      stage: job._id.stage,
+      total_stagewise: job.total_stagewise
+    }));
+
+    return res.json({
+      status: 'success',
+      message: 'Source Wise Admissions',
+      data: formattedAdms
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+exports.getTotalPaidAmount = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Get total amount from upload collection
+    const total = await upload.aggregate([
+      {
+        $match: { source_id: id }
+      },
+      {
+        $group: {
+          _id: '$source_id',
+          totalAmount: { $sum: { $toDouble: '$adv_payble_amt' } }
+        }
+      }
+    ]);
+
+    // Get total paid amount from financial collection
+    const adms = await financial.aggregate([
+      {
+        $match: { source_id: id }
+      },
+      {
+        $group: {
+          _id: '$source_id',
+          totalPaid: { $sum: { $toDouble: '$paid_amount' } }
+        }
+      }
+    ]);
+
+    // Merge total and adms arrays based on source_id
+    const mergedData = total.map(totalItem => {
+      const admsItem = adms.find(adm => adm._id === totalItem._id);
+      return {
+        source_id: totalItem._id,
+        totalAmount: totalItem.totalAmount,
+        totalPaid: admsItem ? admsItem.totalPaid : 0
+      };
+    });
+    // Send merged data as response
+    return res.json({
+      status: 'success',
+      message: 'Source Wise Admissions',
+      data: mergedData
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+};
+
+
+
+exports.addStages = async (req, res) => {
+  try {
+    const { stage } = req.body;
+    console.log(stage);
+    const response = await upload.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          stage: stage
+        },
+      },
+      { new: true }
+    )
+    console.log(response);
+    if (response) {
+      return res.status(200).json({
+        // data: { response },
+        status: "success",
+        message: "Status Change Successfully"
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Wrong",
     });
   }
 }

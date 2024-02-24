@@ -16,7 +16,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AddIcon from "@mui/icons-material/Add";
 import HomeIcon from "@mui/icons-material/Home";
 import OfflinePinIcon from "@mui/icons-material/OfflinePin";
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import GroupsIcon from '@mui/icons-material/Groups';
 import AddModeratorIcon from "@mui/icons-material/AddModerator";
 import PreviewIcon from "@mui/icons-material/Preview";
 import GamesIcon from '@mui/icons-material/Games';
@@ -26,24 +26,7 @@ import ob from "../image/Wainganga.jpg";
 import { bindActionCreators } from "redux";
 import { requestAddResume, requestApplyJob } from "../Redux/actions";
 import { connect } from "react-redux";
-import {
-  CheckOutlined,
-  CodeSandboxOutlined,
-  FileDoneOutlined,
-  FileOutlined,
-  FileSyncOutlined,
-  FlagOutlined,
-  HomeOutlined,
-  MinusSquareOutlined,
-  ShoppingCartOutlined,
-  SettingOutlined,
-  ShoppingOutlined,
-  UnorderedListOutlined,
-  UsergroupAddOutlined,
-  UserOutlined,
-  UserSwitchOutlined,
-  WalletOutlined,
-} from "@ant-design/icons";
+
 
 const Sidebar = ({ handleDrawerToggle, ...props }) => {
   const [user, setUser] = useState({});
@@ -131,16 +114,16 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
       <Divider />
       <br />
       <List>
-        {user.role !== "agent" ? (
-          <ListItem key="dashboard" disablePadding>
-            <ListItemButton to="/dashboard">
-              <ListItemIcon>
-                <HomeIcon style={{ color: "white" }} />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" style={{ color: "white" }} />
-            </ListItemButton>
-          </ListItem>
-        ) : null}
+        {/* {user.role !== "agent" ? ( */}
+        <ListItem key="dashboard" disablePadding>
+          <ListItemButton to="/dashboard">
+            <ListItemIcon>
+              <HomeIcon style={{ color: "white" }} />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" style={{ color: "white" }} />
+          </ListItemButton>
+        </ListItem>
+        {/* ) : null} */}
         {user.role === "clerk" && (
           <ListItem key="upload" disablePadding>
             <ListItemButton to="/upload">
@@ -181,7 +164,7 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
           </ListItem>
         ) : null}
 
-        {user.role === "admin" ? (
+        {user.role === "admin" || user.role === "superadmin" ? (
           <>
             <ListItem key="users" disablePadding>
               <ListItemButton to="/adminaction">
@@ -192,6 +175,14 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
                   primary="Manage Users"
                   style={{ color: "white" }}
                 />
+              </ListItemButton>
+            </ListItem>
+            <ListItem key="handle" disablePadding>
+              <ListItemButton to="/reset">
+                <ListItemIcon>
+                  <GroupsIcon style={{ color: "white" }} />
+                </ListItemIcon>
+                <ListItemText primary="Handle Staff" style={{ color: "white" }} />
               </ListItemButton>
             </ListItem>
           </>
@@ -205,24 +196,17 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
           </ListItemButton>
         </ListItem>
         {user.role === "reset" ? (
-          <>
-            <ListItem key="handle" disablePadding>
-              <ListItemButton to="/reset">
-                <ListItemIcon>
-                  <AutoAwesomeIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText primary="Handle" style={{ color: "white" }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem key="amount" disablePadding>
-              <ListItemButton to="/amount">
-                <ListItemIcon>
-                  <GamesIcon style={{ color: "white" }} />
-                </ListItemIcon>
-                <ListItemText primary="Amount" style={{ color: "white" }} />
-              </ListItemButton>
-            </ListItem>
-          </>
+
+
+          <ListItem key="amount" disablePadding>
+            <ListItemButton to="/amount">
+              <ListItemIcon>
+                <GamesIcon style={{ color: "white" }} />
+              </ListItemIcon>
+              <ListItemText primary="Amount" style={{ color: "white" }} />
+            </ListItemButton>
+          </ListItem>
+
         ) : null}
       </List>
       <Divider />

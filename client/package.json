@@ -26,7 +26,7 @@
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "material-react-table": "^1.14.0",
-    "moment": "^2.29.4",
+    "moment": "^2.30.1",
     "multiselect-react-dropdown": "^2.0.25",
     "otp-input-react": "^0.3.0",
     "path": "^0.12.7",
@@ -84,5 +84,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }

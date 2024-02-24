@@ -213,14 +213,18 @@ const applySchema = new mongoose.Schema(
       type: String,
       default: "Not Present"
     },
-    verifycandidate: {
-      type: Boolean,
-      default: false
-    },
-    verifyparent: {
-      type: Boolean,
-      default: false
+    stage: {
+      type: String,
+      default: null
     }
+    // verifycandidate: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    // verifyparent: {
+    //   type: Boolean,
+    //   default: false
+    // }
   },
 
   { timestamps: true }

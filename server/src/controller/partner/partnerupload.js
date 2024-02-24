@@ -77,7 +77,7 @@ exports.uploadProductsFromCSV = (req, res) => {
 exports.uploadShopData = async (req, res) => {
   try {
     let amt;
-    // console.log(req.params);
+    // console.log(req.body);
     // const { p_id } = req.params.id;
     const {
       candidateName,
@@ -150,11 +150,17 @@ exports.uploadShopData = async (req, res) => {
     const source = source_name !== "undefined" ? source_name : "Other";
     const f_mobile = family_mobile !== "undefined" ? family_mobile : "NA";
 
-    const verify = await otp.findOne({ mobile: mobile });
-    const verifycandidate = verify ? true : false
+    const verify = await otp.findOne({ mobile: mobile }).exec();
+    if(!verify){
+      return res.status(400).json({ message: "Verify Candidate Mobile Number" });
+    }
+    // const verifycandidate = verify ? true : false
 
-    const p_verify = await otp.findOne({ mobile: p_mobile });
-    const verifyparent = p_verify ? true : false
+    const p_verify = await otp.findOne({ mobile: p_mobile }).exec();
+    if (!p_verify) {
+      return res.status(400).json({ message: "Verify Parent Mobile Number" });
+    }
+    // const verifyparent = p_verify ? true : false
 
     const student = new upload({
       candidateName,
@@ -191,8 +197,8 @@ exports.uploadShopData = async (req, res) => {
       // stu_rec_fees,
       // documents,
       p_id,
-      verifycandidate,
-      verifyparent
+      // verifycandidate,
+      // verifyparent
     });
 
     const response = await student.save();

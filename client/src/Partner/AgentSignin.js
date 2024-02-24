@@ -198,7 +198,7 @@ const AgentLogin = (props) => {
     if (empLoginData !== undefined) {
       if (empLoginData?.data?.status == "success") {
         Swal.fire("Log In!", "Login successfully.", "success");
-        navigate("/all-data");
+        navigate("/dashboard");
       } else {
         Swal.fire("Sorry!", empLoginData.data.error, "error");
         seterrorpassword("Invalid Credentials");
@@ -225,7 +225,7 @@ const AgentLogin = (props) => {
             variant="h5"
             style={{ textAlign: "center", fontSize: "30px", color: "white" }}
           >
-            Guest Login
+            Staff Login
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField

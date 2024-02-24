@@ -53,6 +53,10 @@ const {
   editAdminVerify,
   getfinancial,
   getSourceWiseAdm,
+  addStages,
+  getStaffdata,
+  getStagegraph,
+  getTotalPaidAmount,
 } = require("../controller/partner/admin");
 const { requireSignin } = require("../common-middleware");
 const {
@@ -176,6 +180,11 @@ router.get("/branch/data/", getBranchData);
 router.get("/get/financial/:id", getfinancial);
 router.get("/admin/sourcewiseadm", getSourceWiseAdm);
 router.patch("/clerk/required/:id", editRequiredDoc);
+router.post("/add/stages/:id", addStages);
+router.get("/staff/amount/:id", getfinancial);
+router.get("/staff/applications/:id", getStaffdata);
+router.get("/stage/graph/:id", getStagegraph);
+router.get("/amoun/graph/:id", getTotalPaidAmount);
 
 router.post("/send/otp/", sendOtp);
 router.post("/verify/otp/", verifyOtp);

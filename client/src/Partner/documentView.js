@@ -16,7 +16,8 @@ import {
   Select,
   Typography,
   Upload,
-  Radio
+  Radio,
+  Spin
 } from "antd";
 import { toast } from "react-toastify";
 import { Fragment, useEffect, useState } from "react";
@@ -83,6 +84,7 @@ const DocView = (props) => {
   // const handleSubmit = () => {};
   const [radioValue, setRadioValue] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [spinning, setSpinning] = useState(false);
 
   const onFinish = async () => {
     if (radioValue === null) {
@@ -267,6 +269,8 @@ const DocView = (props) => {
     // console.log(values);
     try {
       // setLoader(true);
+      setSpinning(true);
+
       let formData = new FormData();
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9) + "-" + `${params.id}`;
       const key = `${params.course}/${params.branch}/${uniqueSuffix}`;
@@ -299,7 +303,6 @@ const DocView = (props) => {
         const result = await Storage.put(key, tcFile.file, {
           contentType: tcFile.file.type, // Provide the content type if known
         });
-        console.log(result);
         formData.append("file", result.key);
         formData.append("name", tcFile.name);
       }
@@ -437,15 +440,19 @@ const DocView = (props) => {
       setDeplomaFile(null);
       setAllotmentFile(null);
       // setLoader(true);
+      
     } catch (error) {
       console.log(error.message);
       toast.error("error at creating");
-      setLoader(false);
+      // setLoader(false);
+      setSpinning(false);
+
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    setLoader(false);
+    // setLoader(false);
+    setSpinning(false);
     toast.error("Something went wrong !");
     console.log("Failed:", errorInfo);
   };
@@ -471,12 +478,14 @@ const DocView = (props) => {
     if (empProfileData !== undefined) {
       if (empProfileData?.data?.status == "success") {
         Swal.fire("Success!", "Document Uploaded successfully.", "success");
-        setLoader(false);
+        // setLoader(false);
+        setSpinning(false);
         form.resetFields();
         props.employee.empProfileData = undefined;
       } else {
         Swal.fire("Alert!", "Something Went Wrong.", "error");
-        setLoader(false);
+        // setLoader(false);
+        setSpinning(false);
         props.employee.empProfileData = undefined;
       }
     }
@@ -499,7 +508,7 @@ const DocView = (props) => {
         setRadioValue(empData.data.data.required);
       } else {
         Swal.fire("Alert!", "Something Went Wrong.", "error");
-        setLoader(false);
+        // setLoader(false);
         // props.employee.empData = undefined;
       }
     }
@@ -1396,7 +1405,7 @@ const DocView = (props) => {
             </Form>
           ) :
             null}
-
+          <Spin spinning={spinning} fullscreen />
         </Card>
       </Fragment>
     </Layout>

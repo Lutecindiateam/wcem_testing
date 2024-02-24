@@ -9,6 +9,7 @@ import {
   Select,
   Typography,
   Upload,
+  DatePicker
 } from "antd";
 import { toast } from "react-toastify";
 import { Fragment, useEffect, useState } from "react";
@@ -26,6 +27,9 @@ import { connect } from "react-redux";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
+import moment from 'moment';
+import axios from "axios";
+import OtpInput from "otp-input-react";
 
 const UploadData = (props) => {
 
@@ -71,6 +75,7 @@ const UploadData = (props) => {
   const { Title } = Typography;
   const [fileList, setFileList] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [otploader, setOtploader] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
   const [user, setUser] = useState({});
   const [form] = Form.useForm();
@@ -113,6 +118,22 @@ const UploadData = (props) => {
   //   setDocument([...document, e.target.files[0]]);
   // };
   // console.log(document);
+
+  const [otp, setOtp] = useState("");
+  const [showOTP, setShowOTP] = useState(false);
+  const [verifyotp, setVerifyOtp] = useState("");
+
+  const [potp, setPOtp] = useState("");
+  const [pshowOTP, setPShowOTP] = useState(false);
+  const [pverifyotp, setPVerifyOtp] = useState("");
+
+
+  const onchangeOtp = (e) => {
+    setOtp(e.target.value);
+  }
+  const onchangeParentOtp = (e) => {
+    setPOtp(e.target.value);
+  }
 
   useEffect(() => {
     let loginData = props.candidate.loginData;
@@ -171,7 +192,6 @@ const UploadData = (props) => {
 
   const onFinish = async (values) => {
     const { source: sourceName } = values;
-
     // Get the user ID corresponding to the selected name (assuming you have a mapping)
     const selectedUser = source.find((user) => user.name === sourceName);
     const sourceId = selectedUser ? selectedUser._id : null;
@@ -188,7 +208,7 @@ const UploadData = (props) => {
       formData.append("branch_obj", values.branch_obj);
       // }
       formData.append("date_docSubmision", values.date_docSubmision);
-      formData.append("lastExam_passingYear", values.lastExam_passingYear);
+      formData.append("lastExam_passingYear", values.lastExam_passingYear.$y);
       formData.append("team", values.team);
       formData.append("source_name", values.source);
       formData.append("family_mobile", values.family_mobile);
@@ -269,6 +289,81 @@ const UploadData = (props) => {
     setLoader(true);
   };
 
+  const onClickOtpLoading = async () => {
+    setOtploader(true);
+    try {
+      const response = await axios.post('/send/otp/', { number: otp });
+      // Handle response
+      if (response.data.type === "success") {
+        setOtploader(false);
+        setShowOTP(true)
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+      setOtploader(false);
+    }
+  };
+
+  async function onOTPVerify() {
+    setOtploader(true);
+    try {
+      const response = await axios.post('/verify/otp/', { otp: verifyotp, number: otp });
+      // Handle response
+      if (response.data.type === "success") {
+        alert("Mobile Number Verified successfully")
+        // setUser(response.data);
+        setOtploader(false);
+        setShowOTP(false)
+        // setPh("");
+        setOtp("");
+      }
+      setOtploader(false);
+
+    } catch (error) {
+      // Handle error
+      setOtploader(false);
+      console.error('Error:', error);
+    }
+  }
+
+  const onClickPOtpLoading = async () => {
+    setOtploader(true);
+    try {
+      const response = await axios.post('/send/otp/', { number: potp });
+      // Handle response
+      if (response.data.type === "success") {
+        setOtploader(false);
+        setPShowOTP(true)
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error:', error);
+      setOtploader(false);
+    }
+  };
+
+  async function onPOTPVerify() {
+    setOtploader(true);
+    try {
+      const response = await axios.post('/verify/otp/', { otp: pverifyotp, number: potp });
+      // Handle response
+      if (response.data.type === "success") {
+        alert("Mobile Number Verified successfully")
+        // setUser(response.data);
+        setOtploader(false);
+        setPShowOTP(false)
+        // setPh("");
+        setPOtp("");
+      }
+      setOtploader(false);
+
+    } catch (error) {
+      // Handle error
+      setOtploader(false);
+      console.error('Error:', error);
+    }
+  }
   return (
     <Layout>
       <Fragment>
@@ -479,26 +574,119 @@ const UploadData = (props) => {
                 // },
               ]}
             >
-              <Input type="number" placeholder="Enter Candidate Verified Mobile Number" />
+              <Input type="number" placeholder="Enter Candidate Verified Mobile Number" onChange={onchangeOtp}
+              />
             </Form.Item>
-
+            {showOTP &&
+              <>            <div style={{ display: "flex", justifyContent: "center" }}>
+                <h6>Enter OTP</h6> &nbsp;&nbsp;
+                <OtpInput
+                  value={verifyotp}
+                  onChange={setVerifyOtp}
+                  OTPLength={4}
+                  otpType="number"
+                  disabled={false}
+                  autoFocus
+                  className="opt-container "
+                ></OtpInput>
+              </div>
+                <Form.Item
+                  style={{ marginBottom: "15px" }}
+                  className={styles.addProductBtnContainer}
+                >
+                  <Button
+                    type="primary"
+                    // htmlType="submit"
+                    shape="round"
+                    loading={otploader}
+                    onClick={onOTPVerify}
+                    style={{ backgroundColor: "#2c3e50" }}
+                  >
+                    Verify OTP
+                  </Button>
+                </Form.Item>
+              </>}
+            {otp && !showOTP &&
+              <Form.Item
+                style={{ marginBottom: "15px" }}
+                className={styles.addProductBtnContainer}
+              >
+                <Button
+                  type="primary"
+                  // htmlType="submit"
+                  shape="round"
+                  loading={otploader}
+                  onClick={onClickOtpLoading}
+                  style={{ backgroundColor: "#2c3e50" }}
+                >
+                  Send OTP
+                </Button>
+              </Form.Item>
+            }
             <Form.Item
               style={{ marginBottom: "15px" }}
               label="Parent Verified Mobile Number"
               name="p_mobile"
               rules={[
-                // {
-                //   required: true,
-                //   message: "Please input Mobile Number!",
-                // },
+                {
+                  required: true,
+                  message: "Please input Mobile Number!",
+                },
                 {
                   len: 10,
                   message: "Mobile Number must be exactly 10 digits!",
                 },
               ]}
             >
-              <Input type="number" placeholder="Enter Parent Verified Mobile Number" />
+              <Input type="number" placeholder="Enter Parent Verified Mobile Number" onChange={onchangeParentOtp} />
             </Form.Item>
+            {pshowOTP &&
+              <>            <div style={{ display: "flex", justifyContent: "center" }}>
+                <h6>Enter OTP</h6> &nbsp;&nbsp;
+
+                <OtpInput
+                  value={pverifyotp}
+                  onChange={setPVerifyOtp}
+                  OTPLength={4}
+                  otpType="number"
+                  disabled={false}
+                  autoFocus
+                  className="opt-container "
+                ></OtpInput>
+              </div>
+                <Form.Item
+                  style={{ marginBottom: "15px" }}
+                  className={styles.addProductBtnContainer}
+                >
+                  <Button
+                    type="primary"
+                    // htmlType="submit"
+                    shape="round"
+                    loading={otploader}
+                    onClick={onPOTPVerify}
+                    style={{ backgroundColor: "#2c3e50" }}
+                  >
+                    Verify OTP
+                  </Button>
+                </Form.Item>
+              </>}
+            {potp && !pshowOTP &&
+              <Form.Item
+                style={{ marginBottom: "15px" }}
+                className={styles.addProductBtnContainer}
+              >
+                <Button
+                  type="primary"
+                  // htmlType="submit"
+                  shape="round"
+                  loading={otploader}
+                  onClick={onClickPOtpLoading}
+                  style={{ backgroundColor: "#2c3e50" }}
+                >
+                  Send OTP
+                </Button>
+              </Form.Item>
+            }
             <Form.Item
               style={{ marginBottom: "15px" }}
               label="Family Mobile Number"
@@ -540,7 +728,7 @@ const UploadData = (props) => {
                 },
               ]}
             >
-              <Input type="date" />
+              <DatePicker picker="year" placeholder="Select Last Exam Passing Year" style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "15px" }}

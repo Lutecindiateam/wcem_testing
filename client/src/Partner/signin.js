@@ -173,7 +173,7 @@ const PartnerLogin = (props) => {
                 align="right"
                 style={{ color: "white", fontSize: "20px" }}
               >
-                For Guest{" "}
+                For Staff{" "}
                 <a href="/login" style={{ color: "white" }}>
                   Login
                 </a>
