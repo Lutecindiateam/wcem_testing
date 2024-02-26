@@ -4,15 +4,15 @@ const upload = require('../../models/partner/upload');
 
 exports.sendOtp = async (req, res) => {
     // console.log(req.body);
-    return res.status(200).json({ message: "success", type: "success" })
+    // return res.status(200).json({ message: "success", type: "success" })
     const number = "+91" + req.body.number;
     const options = {
         method: 'POST',
-        url: `https://control.msg91.com/api/v5/otp?template_id=65ce0071d6fc0527d10a0e62&mobile=${number}`,
+        url: `https://control.msg91.com/api/v5/otp?template_id=${process.env.TEMPLATE_ID}&mobile=${number}`,
         headers: {
             accept: 'application/json',
             'content-type': 'application/json',
-            authkey: '394213AT3rL5M7sB65cef71aP1'
+            authkey: process.env.AUTH_KEY,
         },
         data: { Param1: 'value1', Param2: 'value2', Param3: 'value3' }
     };
@@ -29,17 +29,17 @@ exports.sendOtp = async (req, res) => {
 }
 
 exports.verifyOtp = async (req, res) => {
-    const saveMobile = await otpverify.create({ mobile: req.body.number })
-    if (saveMobile) {
-        res.status(200).json({ message: "success", type: "success" })
-    }
-    return;
+    // const saveMobile = await otpverify.create({ mobile: req.body.number })
+    // if (saveMobile) {
+    //     res.status(200).json({ message: "success", type: "success" })
+    // }
+    // return;
     const { otp } = req.body;
     const number = "+91" + req.body.number;
     const options = {
         method: 'GET',
         url: `https://control.msg91.com/api/v5/otp/verify?otp=${otp}&mobile=${number}`,
-        headers: { accept: 'application/json', authkey: '394213AT3rL5M7sB65cef71aP1' }
+        headers: { accept: 'application/json', authkey: process.env.AUTH_KEY }
     };
 
     axios
@@ -64,15 +64,39 @@ exports.verifyOtp = async (req, res) => {
             //     },
             //     { new: true }
             // );
-
             const saveMobile = await otpverify.create({ mobile: req.body.number })
             if (saveMobile) {
                 res.status(200).json(response.data)
             }
         })
         .catch(function (error) {
+            console.log(error);
             console.error(error);
         });
 
 
 }
+exports.resendCandidateOtp = async (req, res) => {
+    const number = "+91" + req.body.number
+    // return;
+    try {
+        const options = {
+            method: 'GET',
+            url: `https://control.msg91.com/api/v5/otp/retry?retrytype=text&mobile=${number}`,
+            headers: { accept: 'application/json', authkey: process.env.AUTH_KEY }
+        };
+
+        axios
+            .request(options)
+            .then(function (response) {
+                res.status(200).json(response.data)
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    } catch (error) {
+        return res.status(200).json({ message: "Something went wrong. Please try again." })
+    }
+
+}
+

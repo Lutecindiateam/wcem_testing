@@ -265,7 +265,7 @@ const DetailsModal = ({
           />
         </div>
         <br />
-        {user.role === "editor" ? (
+        {/* {user.role === "editor" ? (
           <div>
             <Typography variant="h6" component="h2">
               Add Incentive
@@ -314,7 +314,7 @@ const DetailsModal = ({
               </Button>
             </div>
           </div>
-        ) : null}
+        ) : null} */}
       </Box>
     </Modal>
   );

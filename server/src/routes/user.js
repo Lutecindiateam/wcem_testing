@@ -74,7 +74,7 @@ const {
   editReSubmission,
 } = require("../controller/partner/reject");
 const { AddAmount, getBranchData } = require("../controller/partner/amount");
-const { sendOtp, verifyOtp } = require("../controller/partner/otp");
+const { sendOtp, verifyOtp, resendCandidateOtp, resendParentOtp } = require("../controller/partner/otp");
 
 const router = express.Router();
 
@@ -188,4 +188,6 @@ router.get("/amoun/graph/:id", getTotalPaidAmount);
 
 router.post("/send/otp/", sendOtp);
 router.post("/verify/otp/", verifyOtp);
+router.post("/resend", resendCandidateOtp);
+
 module.exports = router;  

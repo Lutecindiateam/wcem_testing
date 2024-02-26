@@ -440,7 +440,6 @@ exports.getTotalPaidAmount = async (req, res) => {
 exports.addStages = async (req, res) => {
   try {
     const { stage } = req.body;
-    console.log(stage);
     const response = await upload.findOneAndUpdate(
       { _id: req.params.id },
       {
@@ -450,7 +449,6 @@ exports.addStages = async (req, res) => {
       },
       { new: true }
     )
-    console.log(response);
     if (response) {
       return res.status(200).json({
         // data: { response },

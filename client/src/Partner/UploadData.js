@@ -295,11 +295,13 @@ const UploadData = (props) => {
       const response = await axios.post('/send/otp/', { number: otp });
       // Handle response
       if (response.data.type === "success") {
+        alert("OTP sent successfully.")
         setOtploader(false);
         setShowOTP(true)
       }
     } catch (error) {
       // Handle error
+      alert("Something went wrong. Please try again.")
       console.error('Error:', error);
       setOtploader(false);
     }
@@ -315,8 +317,13 @@ const UploadData = (props) => {
         // setUser(response.data);
         setOtploader(false);
         setShowOTP(false)
+        setVerifyOtp("")
         // setPh("");
         setOtp("");
+      } else {
+        if (response.data.type === "error") {
+          alert(response.data.message)
+        }
       }
       setOtploader(false);
 
@@ -333,11 +340,13 @@ const UploadData = (props) => {
       const response = await axios.post('/send/otp/', { number: potp });
       // Handle response
       if (response.data.type === "success") {
+        alert("OTP sent successfully.")
         setOtploader(false);
         setPShowOTP(true)
       }
     } catch (error) {
       // Handle error
+      alert("Something went wrong. Please try again.")
       console.error('Error:', error);
       setOtploader(false);
     }
@@ -353,15 +362,43 @@ const UploadData = (props) => {
         // setUser(response.data);
         setOtploader(false);
         setPShowOTP(false)
+        setPVerifyOtp("")
         // setPh("");
         setPOtp("");
+      } else {
+        if (response.data.type === "error") {
+          alert(response.data.message)
+        }
       }
       setOtploader(false);
 
     } catch (error) {
       // Handle error
       setOtploader(false);
+      alert("Something went wrong. Please try again.")
       console.error('Error:', error);
+    }
+  }
+
+  const handleResend = async () => {
+    if (otp) {
+      const response = await axios.post('/resend', { number: otp });
+      if (response.data.type === "success") {
+        alert("Resend OTP Successfully")
+      }
+    } else {
+      alert("Something went wrong. Please try again.")
+    }
+  }
+
+  const handleParentResend = async () => {
+    if (potp) {
+      const response = await axios.post('/resend', { number: potp });
+      if (response.data.type === "success") {
+        alert("Resend OTP Successfully")
+      }
+    } else {
+      alert("Something went wrong. Please try again.")
     }
   }
   return (
@@ -522,7 +559,7 @@ const UploadData = (props) => {
                   required: true,
 
                   // required: !courses,
-                  message: "Please select Course",
+                  message: "Please select Branch",
                 },
               ]}
 
@@ -556,7 +593,7 @@ const UploadData = (props) => {
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "15px" }}
-              label="Candidate Verified Mobile Number"
+              label="Candidate Mobile Number"
               name="mobile"
               rules={[
                 {
@@ -574,7 +611,7 @@ const UploadData = (props) => {
                 // },
               ]}
             >
-              <Input type="number" placeholder="Enter Candidate Verified Mobile Number" onChange={onchangeOtp}
+              <Input type="number" placeholder="Enter Candidate Mobile Number" onChange={onchangeOtp}
               />
             </Form.Item>
             {showOTP &&
@@ -589,6 +626,7 @@ const UploadData = (props) => {
                   autoFocus
                   className="opt-container "
                 ></OtpInput>
+                <b><a type="button" onClick={handleResend} class="text-danger">Resend OTP</a></b>
               </div>
                 <Form.Item
                   style={{ marginBottom: "15px" }}
@@ -625,7 +663,7 @@ const UploadData = (props) => {
             }
             <Form.Item
               style={{ marginBottom: "15px" }}
-              label="Parent Verified Mobile Number"
+              label="Parent Mobile Number"
               name="p_mobile"
               rules={[
                 {
@@ -636,9 +674,17 @@ const UploadData = (props) => {
                   len: 10,
                   message: "Mobile Number must be exactly 10 digits!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (value && value !== getFieldValue('mobile')) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Parent Mobile Number cannot be same as Candidate Mobile Number!'));
+                  },
+                }),
               ]}
             >
-              <Input type="number" placeholder="Enter Parent Verified Mobile Number" onChange={onchangeParentOtp} />
+              <Input type="number" placeholder="Enter Parent Mobile Number" onChange={onchangeParentOtp} />
             </Form.Item>
             {pshowOTP &&
               <>            <div style={{ display: "flex", justifyContent: "center" }}>
@@ -653,6 +699,7 @@ const UploadData = (props) => {
                   autoFocus
                   className="opt-container "
                 ></OtpInput>
+                <b><a type="button" onClick={handleParentResend} class="text-danger">Resend OTP</a></b>
               </div>
                 <Form.Item
                   style={{ marginBottom: "15px" }}
