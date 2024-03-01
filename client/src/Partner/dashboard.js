@@ -15,7 +15,9 @@ import {
   requestCandidateForJob,
   requestAdminCategoryJob,
   requestJobs,
-  requestEmpJoblist
+  requestEmpJoblist,
+  requestGetJobAlert,
+  requestAdminSixCompanies,
 } from "../Redux/actions";
 import { connect } from "react-redux";
 import Pie from "./pie";
@@ -29,7 +31,8 @@ const Dashboard = ({ information, ...props }) => {
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [rejList, setRejList] = useState([]);
-
+  const [source, setSource] = useState([])
+  const [stages, setStages] = useState()
   // console.log(user);
   // useEffect(() => {
   //   let loginData = props.candidate.loginData;
@@ -64,6 +67,43 @@ const Dashboard = ({ information, ...props }) => {
   // }, [user]);
 
   //for proxy & employee  registration
+  // useEffect(() => {
+  //   let loginData = props.data.loginData;
+  //   if (loginData !== undefined) {
+  //     if (loginData?.data?.status == "success") {
+  //       if (
+  //         loginData?.data?.data.role === "admin" ||
+  //         loginData?.data?.data.role === "editor" ||
+  //         loginData?.data?.data.role === "superadmin"
+  //       ) {
+  //         props.requestGetJobAlert({
+  //           // id: loginData.data.data.id,
+  //           // role: loginData.data.data.role,
+  //           token: loginData.data.data.token,
+  //         });
+  //       }
+  //     }
+  //   }
+  // }, [props?.data?.loginData, props.candidate.candidatePictureData]);
+
+  useEffect(() => {
+    let jobAlertData = props.candidate.jobAlertData;
+    if (jobAlertData !== undefined) {
+      if (jobAlertData?.data?.status === "success") {
+        setSource(jobAlertData.data.data.response);
+      }
+    }
+  }, [props.candidate.jobAlertData]);
+
+  useEffect(() => {
+    let lastSixEmpData = props.data.lastSixEmpData;
+    if (lastSixEmpData !== undefined) {
+      if (lastSixEmpData?.data?.status === "success") {
+        setStages(lastSixEmpData.data.data);
+      }
+    }
+  }, [props.data.lastSixEmpData]);
+
   useEffect(() => {
     // console.log("hello");
     let loginData = props.candidate.loginData;
@@ -108,7 +148,7 @@ const Dashboard = ({ information, ...props }) => {
 
   useEffect(() => {
     let empJobListData = props.employee.empJobListData;
-    console.log(empJobListData);
+    // console.log(empJobListData);
     if (empJobListData !== undefined) {
       if (empJobListData?.data?.status === "success") {
         setList(empJobListData.data.data.response);
@@ -152,6 +192,10 @@ const Dashboard = ({ information, ...props }) => {
           props.requestAdminMonthJob({
             token: loginData.data.data.token,
           });
+          props.requestGetJobAlert({
+            token: loginData.data.data.token,
+          });
+          props.requestAdminSixCompanies();
         }
       }
     }
@@ -171,10 +215,9 @@ const Dashboard = ({ information, ...props }) => {
     let loginData = props.data.loginData;
     if (loginData !== undefined) {
       if (loginData?.data?.status == "success") {
+        const { role } = loginData?.data?.data;
         if (
-          loginData?.data?.data.role === "admin" ||
-          loginData.data.data.role === "editor" ||
-          loginData.data.data.role === "superadmin"
+          role === "admin" || role === "editor" || role === "superadmin"
         ) {
           setUser(loginData.data.data);
           props.requestAdminCategoryJob({
@@ -211,6 +254,7 @@ const Dashboard = ({ information, ...props }) => {
     }
   }, [props.candidate.jobsData]);
 
+  
   //Admin api
   useEffect(() => {
     let categoryJobData = props.data.categoryJobData;
@@ -310,10 +354,10 @@ const Dashboard = ({ information, ...props }) => {
                       <div className="media-body text-left">
                         <h3 className="">
                           {user.role === "agent" ? (
-                            
+
                             list.filter(post => post.rejection !== null)
                               .length
-                              ) :
+                          ) :
                             (
                               rejList
                                 ? rejList.length
@@ -364,18 +408,148 @@ const Dashboard = ({ information, ...props }) => {
                 </div>
               </div>
             </div>
+            {user.role === "editor" || user.role === "admin" || user.role === "superadmin" ?
+              <>
+                <div className="col-xl-3 col-sm-6 col-12">
+                  <div className="card dashboard-card">
+                    <div className="card-content">
+                      <div
+                        className="card-body dashboard-card-body"
+                        style={{
+                          borderRadius: "10px",
+                          background:
+                            "linear-gradient(90deg, hsla(287, 46%, 75%, 1) 2%, hsla(287, 24%, 44%, 1) 100%)",
+                        }}
+                      >
+                        <div className="media d-flex">
+                          <div className="media-body text-left">
+                            <h3 className="">
+                              {stages ? stages.stage1
+                                : 0}
+                            </h3>
+                            <span className="">Stage 1 </span>
+                          </div>
+                          <div className="align-self-center">
+                            <i
+                              className="icon-wallet font-large-2 float-right"
+                              style={{ color: "#fff	" }}
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-sm-6 col-12">
+                  <div className="card dashboard-card">
+                    <div className="card-content">
+                      <div
+                        className="card-body dashboard-card-body"
+                        style={{
+                          borderRadius: "10px",
+                          background:
+                            "linear-gradient(90deg, hsla(223, 28%, 73%, 1) 0%, hsla(222, 22%, 48%, 1) 100%)",
+                        }}
+                      >
+                        <div className="media d-flex">
+                          <div className="media-body text-left">
+                            <h3 className="">
+                              {stages ? stages.stage2
+                                : 0}
+                            </h3>
+                            <span className=""> Stage 2</span>
+                          </div>
+                          <div className="align-self-center">
+                            <i
+                              className="icon-wallet font-large-2 float-right"
+                              style={{ color: "#fff	" }}
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-sm-6 col-12">
+                  <div className="card dashboard-card">
+                    <div className="card-content">
+                      <div
+                        className="card-body dashboard-card-body"
+                        style={{
+                          borderRadius: "10px",
+                          background:
+                            "linear-gradient(90deg, hsla(161, 68%, 73%, 1) 0%, hsla(161, 100%, 27%, 1) 100%)",
+                        }}
+                      >
+                        <div className="media d-flex">
+                          <div className="media-body text-left">
+                            <h3 className="">
+                              {stages ? stages.stage3
+                                : 0}
+                            </h3>
+                            <span className="">Stage 3</span>
+                          </div>
+                          <div className="align-self-center">
+                            <i
+                              className="icon-rocket font-large-2 float-right"
+                              style={{ color: "#fff	" }}
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-sm-6 col-12">
+                  <div className="card dashboard-card">
+                    <div className="card-content">
+                      <div
+                        className="card-body dashboard-card-body"
+                        style={{
+                          borderRadius: "10px",
+                          background:
+                            "linear-gradient(90deg, hsla(211, 87%, 65%, 1) 0%, hsla(211, 33%, 30%, 1) 100%)",
+                        }}
+                      >
+                        <div className="media d-flex">
+                          <div className="media-body text-left">
+                            <h3 className="">{source ? source?.length : 0}</h3>
+                            <span className="">Total Staff</span>
+                          </div>
+                          <div className="align-self-center">
+                            <i
+                              className="icon-cloud-download font-large-2 float-right"
+                              style={{ color: "#fff	" }}
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+              : null
+            }
+
           </div>
-          <br />
-          {user.role === "superadmin" ? (
-            <Graph />
-          ) : null}
+          {
+            // console.log(user.role === "editor" || user.role === "admin" || user.role === "superadmin") &&
+            user.role === "editor" || user.role === "admin" || user.role === "superadmin" ?
+              <Bar />
+              : null
+          }
           {
             user.role === "agent" ? (
-              <AgentGraph 
-              id={user.id}
+              <AgentGraph
+                id={user.id}
               />
             ) : null
           }
+          {/* <br /> */}
+          {/* {user.role === "superadmin" ? (
+            <Graph />
+          ) : null} */}
+
           {/* <div>
             <Graph />
             
@@ -409,7 +583,9 @@ const mapDispatchToProps = (dispatch) =>
       requestCandidateForJob,
       requestAdminCategoryJob,
       requestJobs,
-      requestEmpJoblist
+      requestEmpJoblist,
+      requestGetJobAlert,
+      requestAdminSixCompanies,
     },
     dispatch
   );

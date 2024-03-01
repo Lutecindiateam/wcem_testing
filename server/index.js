@@ -1,13 +1,13 @@
 const express = require("express");
 const env = require("dotenv");
 const path = require("path");
-// const cors = require("cors");
-const helmet = require("helmet")
+const cors = require("cors");
+// const helmet = require("helmet")
 const bodyParser = require("body-parser");
 
 const app = express();
-// app.use(cors());
-app.use(helmet());
+app.use(cors());
+// app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");

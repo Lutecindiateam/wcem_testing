@@ -243,7 +243,7 @@ export default (state = {}, { type, data }) => {
         return {
           ...state,
           editCareerData: data,
-        };
+        };  
   
       case RECEIVE_ADMIN_ADD_SIZE:
         return {

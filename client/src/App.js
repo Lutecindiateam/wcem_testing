@@ -28,6 +28,7 @@ import Reset from "./Partner/handle"
 import Amount from "./Partner/Amount"
 import VerifyOtp from "./Partner/OtpRegister";
 import Dashboard from "./Partner/dashboard"
+import Bar from "./Partner/bar";
 
 
 const router = createBrowserRouter([
@@ -79,10 +80,10 @@ const router = createBrowserRouter([
     path: "/adminaction",
     element: <Adminaction />,
   },
-  {
-    path: "/demobar",
-    element: <DemoBar />,
-  },
+  // {
+  //   path: "/bar",
+  //   element: <Bar />,
+  // },
   {
     path: "/dashboard",
     element: <Dashboard />

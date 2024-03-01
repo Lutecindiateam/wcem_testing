@@ -57,6 +57,8 @@ const {
   getStaffdata,
   getStagegraph,
   getTotalPaidAmount,
+  getDashboardData,
+  getBranchWiseData,
 } = require("../controller/partner/admin");
 const { requireSignin } = require("../common-middleware");
 const {
@@ -185,6 +187,8 @@ router.get("/staff/amount/:id", getfinancial);
 router.get("/staff/applications/:id", getStaffdata);
 router.get("/stage/graph/:id", getStagegraph);
 router.get("/amoun/graph/:id", getTotalPaidAmount);
+router.get("/dashboard/data", getDashboardData)
+router.get("/admin/branch/data", getBranchWiseData);
 
 router.post("/send/otp/", sendOtp);
 router.post("/verify/otp/", verifyOtp);

@@ -269,6 +269,67 @@ export const companyJob = (obj) => {
       return err.response;
     });
 };
+
+export const getSixCompanies = (obj) => {
+  return axios
+    .get("/dashboard/data")
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+export const getCandidateDetails = (obj) => {
+  return axios
+    .get("/admin/branch/data")
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const getSixJobs = (obj) => {
+  return axios
+    .get("/pass/reset")
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const getCareer = (obj) => {
+  //
+  return axios
+    .get("/stage/graph/" + obj.id)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
+export const getJobDetails = (obj) => {
+  return axios
+    .get("/amoun/graph/" + obj.id)
+    .then((response) => {
+      return response;
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      return err.response;
+    });
+};
+
 //*************END*********//
 
 export const adminforgot1 = (obj) => {
@@ -387,17 +448,7 @@ export const getCompanies = (obj) => {
     });
 };
 
-export const getSixCompanies = (obj) => {
-  return axios
-    .get("/admin/lastsixEmployees")
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
+
 
 export const getCandidates = (obj) => {
   return axios
@@ -413,17 +464,7 @@ export const getCandidates = (obj) => {
     });
 };
 
-export const getCandidateDetails = (obj) => {
-  return axios
-    .get("/admin/getCandidateDetail/" + obj.id)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
+
 
 export const admingetJobs = (obj) => {
   return axios
@@ -437,29 +478,9 @@ export const admingetJobs = (obj) => {
     });
 };
 
-export const getSixJobs = (obj) => {
-  return axios
-    .get("/admin/lastsixJobs")
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
 
-export const getJobDetails = (obj) => {
-  return axios
-    .get("/admin/getjobDetail/" + obj.id)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
+
+
 
 export const getSubscribe = (obj) => {
   return axios
@@ -492,18 +513,6 @@ export const getAllCareer = (obj) => {
     });
 };
 
-export const getCareer = (obj) => {
-  //
-  return axios
-    .get("/admin/editcareer_levels/" + obj.id)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      console.log("Error", err.response.data.message);
-      return err.response;
-    });
-};
 
 export const addCareer = (obj) => {
   return axios

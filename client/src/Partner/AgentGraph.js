@@ -104,10 +104,84 @@ const AgentGraph = (props) => {
 
 
     return (
-        <Layout>
+        <div class="row" id="graph">
+            <div class="col-lg-8 d-flex flex-column">
+                <div class="row flex-grow">
+                    <div class="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
+                        <div class="card card-rounded">
+                            <div
+                                class="card-body"
+                                style={{ padding: "30px" }}
+                            >
+                                <div class="d-sm-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h4 class="card-title card-title-dash">
+                                            Stage Wise Candidate
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div
+                                    class="chartContainer"
+                                    style={{
+                                        position: "relative",
+                                    }}
+                                >
+                                    <br />
+                                    <CanvasJSChart options={companyJobDataoptions} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="container-scroller">
-                {/* <Header name="Home" /> */}
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="row flex-grow">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card card-rounded">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 class="card-title card-title-dash">
+                                                Total Incentive/Total Paid
+                                            </h4>
+                                        </div>
+                                        <CanvasJSChart options={amountoptions} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Spin spinning={spinning} fullscreen />
+
+        </div>
+
+    );
+}
+const mapStateToProps = (state) => {
+    return {
+        employee: state.employee,
+        data: state.data
+    };
+};
+
+const mapDispatchToProps = (dispatch) =>
+    bindActionCreators(
+        {
+            requestApprove,
+            requestInterviewApprove
+        },
+        dispatch
+    );
+
+export default connect(mapStateToProps, mapDispatchToProps)(AgentGraph);
+
+
+
+{/* <div class="container-scroller">
                 <div class="container-fluid page-body-wrapper">
                     <div class="row">
                         <div class="col-lg-8 d-flex flex-column">
@@ -172,26 +246,4 @@ const AgentGraph = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <Spin spinning={spinning} fullscreen />
-
-        </Layout>
-    );
-}
-const mapStateToProps = (state) => {
-    return {
-        employee: state.employee,
-        data: state.data
-    };
-};
-
-const mapDispatchToProps = (dispatch) =>
-    bindActionCreators(
-        {
-            requestApprove,
-            requestInterviewApprove
-        },
-        dispatch
-    );
-
-export default connect(mapStateToProps, mapDispatchToProps)(AgentGraph);
+            </div> */}

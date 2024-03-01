@@ -179,9 +179,9 @@ const Adminaction = (props) => {
     if (registerdata !== undefined) {
       if (registerdata?.data?.status === "success") {
         props.candidate.registerData = undefined;
-        Swal.fire("Good job!", "User Added successfully.", "success");
-   resetForm();
-          // navigate("/adminaction");
+        Swal.fire("Good job!", "Staff Added successfully.", "success");
+        resetForm();
+        // navigate("/adminaction");
 
       } else {
         Swal.fire("Sorry!", "Email is already used.", "error");
@@ -193,93 +193,93 @@ const Adminaction = (props) => {
 
   return (
     <Layout>
-    <div className="background">
-      <Container component="main" maxWidth="xs">
-        <div>
-          <br />
-          <br />
-          <br />
-          <Typography variant="h5">Agent Registration</Typography>
-          <br />
-          <form onSubmit={handleSubmit}>
-             <TextField
-              fullWidth
-              label=" Full Name"
-              type="text"
-              required
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              margin="normal"
-              InputProps={{
-                style: {
-                  border: "1px solid white", // White border
-                  borderRadius: "10px", // Border radius
-                  color: "white", // Text color
-                },
-              }}
-              InputLabelProps={{
-                style: {
-                  color: "white", // Label color
-                },
-              }}
-            />
-            <TextField
-              fullWidth
-              label=" Email address"
-              type="email"
-              required
-              placeholder="Enter email"
-              
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
-              InputProps={{
-                style: {
-                  border: "1px solid white", // White border
-                  borderRadius: "10px", // Border radius
-                  color: "white", // Text color
-                },
-              }}
-              InputLabelProps={{
-                style: {
-                  color: "white", // Label color
-                },
-              }}
-            />
-
-            <TextField
-              fullWidth
-              label="Set Password"
-              type="password"
-              required
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-              InputProps={{
-                style: {
-                  border: "1px solid white", // White border
-                  borderRadius: "10px", // Border radius
-                  color: "white", // Text color
-                },
-              }}
-              InputLabelProps={{
-                style: {
-                  color: "white", // Label color
-                },
-              }}
-            />
-
+      <div className="background">
+        <Container component="main" maxWidth="xs">
+          <div>
             <br />
+            <br />
+            <br />
+            <Typography variant="h5">Staff Registration</Typography>
+            <br />
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label=" Full Name"
+                type="text"
+                required
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  style: {
+                    border: "1px solid white", // White border
+                    borderRadius: "10px", // Border radius
+                    color: "white", // Text color
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: "white", // Label color
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                label=" Email address"
+                type="email"
+                required
+                placeholder="Enter email"
 
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Add Agent
-            </Button>
-          </form>
-        </div>
-      </Container>
-    </div>
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  style: {
+                    border: "1px solid white", // White border
+                    borderRadius: "10px", // Border radius
+                    color: "white", // Text color
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: "white", // Label color
+                  },
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Set Password"
+                type="password"
+                required
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  style: {
+                    border: "1px solid white", // White border
+                    borderRadius: "10px", // Border radius
+                    color: "white", // Text color
+                  },
+                }}
+                InputLabelProps={{
+                  style: {
+                    color: "white", // Label color
+                  },
+                }}
+              />
+
+              <br />
+
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Submit
+              </Button>
+            </form>
+          </div>
+        </Container>
+      </div>
     </Layout>
   );
 };

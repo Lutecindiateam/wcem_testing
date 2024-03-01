@@ -462,3 +462,74 @@ exports.addStages = async (req, res) => {
     });
   }
 }
+
+exports.getDashboardData = async (req, res) => {
+  try {
+    // const id = req.params.id;
+    const adms = await upload.aggregate([
+      {
+        $match: { rejection: null } // Filter documents where rejection is not null
+      },
+      {
+        $group: {
+          _id: null,
+          // count: { $sum: 1 } 
+          stage1: { $sum: { $cond: [{ $eq: ["$stage", "Stage1"] }, 1, 0] } },
+          stage2: { $sum: { $cond: [{ $eq: ["$stage", "Stage2"] }, 1, 0] } },
+          stage3: { $sum: { $cond: [{ $eq: ["$stage", "Stage3"] }, 1, 0] } }
+        }
+      }
+      // { $limit: 5 }
+    ]);
+    // console.log(adms);
+    // return;
+    const stages = adms[0];
+
+    return res.json({
+      status: 'success',
+      message: 'Source Wise Admissions',
+      data: stages
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}
+
+exports.getBranchWiseData = async (req, res) => {
+  try {
+    const adms = await upload.aggregate([
+      {
+        $match: { rejection: null } // Filter documents where status is true
+      },
+      {
+        $group: {
+          _id: { name: '$course' },
+          total_branchwiseadm: { $sum: 1 }
+        }
+      },
+      // { $sort: { total_sourcewiseadm: -1 } },
+      // { $limit: 5 }
+    ]);
+   
+    const branches = adms.map(job => ({
+      name: job._id.name,
+      total_branchwiseadm: job.total_branchwiseadm
+    }));
+
+    return res.json({
+      status: 'success',
+      message: 'Source Wise Admissions',
+      data: branches
+    });
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error'
+    });
+  }
+}

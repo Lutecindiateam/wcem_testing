@@ -175,11 +175,11 @@ const Reset = (props) => {
     }
   }
 
-  const handleGraph = (id) => {
-    // setSpinning(true);
-    setGraphId(id);
-    // navigate(`/handle/${id}`)
-  }
+  // const handleGraph = (id) => {
+  //   // setSpinning(true);
+  //   setGraphId(id);
+  //   // navigate(`/handle/${id}`)
+  // }
 
   const onSubmit = (values) => {
     // Handle form submission here
@@ -265,16 +265,16 @@ const Reset = (props) => {
         </Button>
       ),
     },
-    {
-      field: "graph",
-      headerName: "View Graph",
-      flex: 1,
-      renderCell: (params) => (
-        <Button onClick={() => handleGraph(params.row.more.id)}>
-          View Graph
-        </Button>
-      ),
-    },
+    // {
+    //   field: "graph",
+    //   headerName: "View Graph",
+    //   flex: 1,
+    //   renderCell: (params) => (
+    //     <Button onClick={() => handleGraph(params.row.more.id)}>
+    //       View Graph
+    //     </Button>
+    //   ),
+    // },
   ];
 
   const rows = list.map((item, index) => ({
@@ -284,9 +284,9 @@ const Reset = (props) => {
     more: {
       id: item._id,
     },
-    graph: {
-      id: item._id
-    }
+    // graph: {
+    //   id: item._id
+    // }
   }));
 
   return (
@@ -302,13 +302,13 @@ const Reset = (props) => {
             }}
           />
         </div>
-        {
+        {/* {
           graphId ? (
             <AgentGraph
               id={graphId}
             />
           ) : null
-        }
+        } */}
       </div>
       <DetailsModal
         id={id}

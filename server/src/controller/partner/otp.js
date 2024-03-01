@@ -4,7 +4,7 @@ const upload = require('../../models/partner/upload');
 
 exports.sendOtp = async (req, res) => {
     // console.log(req.body);
-    // return res.status(200).json({ message: "success", type: "success" })
+    return res.status(200).json({ message: "success", type: "success" })
     const number = "+91" + req.body.number;
     const options = {
         method: 'POST',
@@ -29,11 +29,11 @@ exports.sendOtp = async (req, res) => {
 }
 
 exports.verifyOtp = async (req, res) => {
-    // const saveMobile = await otpverify.create({ mobile: req.body.number })
-    // if (saveMobile) {
-    //     res.status(200).json({ message: "success", type: "success" })
-    // }
-    // return;
+    const saveMobile = await otpverify.create({ mobile: req.body.number })
+    if (saveMobile) {
+        res.status(200).json({ message: "success", type: "success" })
+    }
+    return;
     const { otp } = req.body;
     const number = "+91" + req.body.number;
     const options = {

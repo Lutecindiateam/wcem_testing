@@ -25,7 +25,6 @@ exports.getPartnerProfile = async (req, res) => {
 };
 
 exports.adminupdate = async (req, res) => {
-  // console.log(req.params);
   try {
     const update = await Partner.findOneAndUpdate(
       { _id: req.params.id },
@@ -54,7 +53,6 @@ exports.adminupdate = async (req, res) => {
 exports.admin_action = async (req, res) => {
   // console.log(req);
   try {
-    // Assuming req.body.active is the status you want to filter on
     const pendinguser = await Partner.find();
 
     return res.status(200).json({

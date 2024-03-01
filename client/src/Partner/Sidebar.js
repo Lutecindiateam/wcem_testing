@@ -76,6 +76,7 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
         backgroundColor: "#2c3e50",
         height: "100vh",
         paddingTop: "20px",
+        
       }}
     >
       {/* <Toolbar /> */}
@@ -172,7 +173,7 @@ const Sidebar = ({ handleDrawerToggle, ...props }) => {
                   <ManageAccountsIcon style={{ color: "white" }} />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Manage Users"
+                  primary="Manage Staff"
                   style={{ color: "white" }}
                 />
               </ListItemButton>
