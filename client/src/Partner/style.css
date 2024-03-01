@@ -5,3 +5,13 @@
 .card{
     margin-bottom: 1.875rem;
 }
+.feature-card {
+    transition: transform 0.5s ease, z-index 0.5s ease;
+   
+  }
+ 
+  .feature-card:hover {
+    transform: scale(1.2); /* Increase the size on hover */
+    z-index: 1; /* Adjust the stacking order on hover */
+  }
+ 

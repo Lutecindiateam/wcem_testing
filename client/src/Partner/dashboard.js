@@ -254,7 +254,7 @@ const Dashboard = ({ information, ...props }) => {
     }
   }, [props.candidate.jobsData]);
 
-  
+
   //Admin api
   useEffect(() => {
     let categoryJobData = props.data.categoryJobData;
@@ -278,7 +278,7 @@ const Dashboard = ({ information, ...props }) => {
           <QuickLinks />
           <br />
           <div className="row">
-            <div className="col-xl-3 col-sm-6 col-12">
+            <div className="col-xl-3 col-sm-6 col-12 feature-card">
               <div className="card dashboard-card">
                 <div className="card-content">
                   <div
@@ -305,7 +305,7 @@ const Dashboard = ({ information, ...props }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-3 col-sm-6 col-12">
+            <div className="col-xl-3 col-sm-6 col-12 feature-card">
               <div className="card dashboard-card">
                 <div className="card-content">
                   <div
@@ -339,7 +339,7 @@ const Dashboard = ({ information, ...props }) => {
               </div>
             </div>
 
-            <div className="col-xl-3 col-sm-6 col-12">
+            <div className="col-xl-3 col-sm-6 col-12 feature-card">
               <div className="card dashboard-card">
                 <div className="card-content">
                   <div
@@ -377,7 +377,7 @@ const Dashboard = ({ information, ...props }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-3 col-sm-6 col-12">
+            <div className="col-xl-3 col-sm-6 col-12 feature-card">
               <div className="card dashboard-card">
                 <div className="card-content">
                   <div
@@ -410,7 +410,7 @@ const Dashboard = ({ information, ...props }) => {
             </div>
             {user.role === "editor" || user.role === "admin" || user.role === "superadmin" ?
               <>
-                <div className="col-xl-3 col-sm-6 col-12">
+                <div className="col-xl-3 col-sm-6 col-12 feature-card">
                   <div className="card dashboard-card">
                     <div className="card-content">
                       <div
@@ -440,7 +440,7 @@ const Dashboard = ({ information, ...props }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-3 col-sm-6 col-12">
+                <div className="col-xl-3 col-sm-6 col-12 feature-card">
                   <div className="card dashboard-card">
                     <div className="card-content">
                       <div
@@ -470,7 +470,7 @@ const Dashboard = ({ information, ...props }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-3 col-sm-6 col-12">
+                <div className="col-xl-3 col-sm-6 col-12 feature-card">
                   <div className="card dashboard-card">
                     <div className="card-content">
                       <div
@@ -500,7 +500,7 @@ const Dashboard = ({ information, ...props }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-3 col-sm-6 col-12">
+                <div className="col-xl-3 col-sm-6 col-12 feature-card">
                   <div className="card dashboard-card">
                     <div className="card-content">
                       <div
